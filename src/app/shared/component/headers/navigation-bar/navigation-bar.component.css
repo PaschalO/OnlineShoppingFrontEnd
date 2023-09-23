@@ -1,0 +1,18 @@
+.nav-toolbar {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navbar-right-links {
+    display: flex;
+    gap: 1rem
+}
+
+
+/* below code does not do anything */
+
+.navbar-right-links .mat-badge-accent .mat-badge-content {
+    background: green;
+}

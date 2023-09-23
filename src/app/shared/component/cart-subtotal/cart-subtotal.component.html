@@ -1,0 +1,17 @@
+<mat-card class="sub-total-card">
+    <mat-card-header>
+        <mat-card-title>
+            <span>{{ orderSummary }}</span>
+            <span>: ${{ cartSubTotal }}</span>
+            <mat-divider></mat-divider>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <span>Order Total</span>
+        <span> {{ orderTotal }}</span>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-stroked-button>{{ buttonCheckout }}</button>
+    </mat-card-actions>
+</mat-card>
+

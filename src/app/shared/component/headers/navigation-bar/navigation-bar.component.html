@@ -1,0 +1,11 @@
+<mat-toolbar class="nav-toolbar" style="width:100%">
+    <a routerLink="/" mat-button>MyStore</a>
+    <app-search-form></app-search-form>
+    <div class="navbar-right-links" *ngIf="cartService.cartCount$ | async as cartV">
+        <a mat-button>Account</a>
+        <button routerLink="/cart" mat-button matBadge="{{cartV.item}}" matBadgePosition="after" matBadgeColor="accent">
+            <mat-icon>shopping_cart</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
+

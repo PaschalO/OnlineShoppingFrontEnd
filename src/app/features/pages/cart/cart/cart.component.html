@@ -1,0 +1,22 @@
+<ng-container *ngIf="filteredProductList$ | async as products">
+  <ng-container *ngIf="products.length">
+    <div class="card-container">
+      <div>
+        <mat-card class="card-radius">
+          <mat-card-header>
+            <span>{{title}}</span>
+          </mat-card-header>
+        </mat-card>
+        <mat-divider></mat-divider>
+        <app-cart-item
+          *ngFor="let cartProducts of products;" [product]="cartProducts" (deleteItem)="onDeleteItem($event)">
+        </app-cart-item>
+      </div>
+      <div>
+        <app-cart-subtotal></app-cart-subtotal>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+

@@ -1,0 +1,11 @@
+<div class="product-quantity">
+    <div class="flex-items">
+        <button (click)="decrement()"><mat-icon class="button-1">remove</mat-icon></button>
+    </div>
+    <div class="flex-items">
+        <input type="number" min="1" [(ngModel)]="value"  #numberInput />
+    </div>
+    <div class="flex-items">
+        <button (click)="increment()"><mat-icon class="button-2">add</mat-icon></button>
+    </div>
+</div>

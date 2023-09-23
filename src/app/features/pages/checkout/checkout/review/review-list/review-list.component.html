@@ -1,0 +1,4 @@
+<app-review-detail
+  *ngFor="let product of (productItems$ | async) trackBy:productTrackBy"
+  [product]="product"
+></app-review-detail>

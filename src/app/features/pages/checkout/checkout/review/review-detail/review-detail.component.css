@@ -1,0 +1,48 @@
+.review-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.top {
+  margin-top: 1rem;
+}
+
+.review-product-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-product-items img {
+  width: 100%;
+  flex: 1;
+}
+
+.review-product-info {
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  justify-content: space-between;
+}
+
+.center {
+  text-align: right;
+}
+
+.review-shipping-details, .review-payment-details, .review-price-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.review-shipping-item, .review-payment-item{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.review-price-items .price-items1, .review-price-items .price-items2 {
+  display: flex;
+  justify-content: space-between;
+}
+

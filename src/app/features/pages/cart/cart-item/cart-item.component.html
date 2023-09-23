@@ -1,0 +1,42 @@
+<mat-card class="card-radius">
+  <mat-card-content *ngIf="product">
+    <div class="card-items">
+      <div>
+        <img [src]=product.image mat-card-sm-image/>
+      </div>
+      <div class="card-description">
+        <p>
+          {{product.title}}
+        </p>
+        <div class="card-actions-buttons">
+          <a mat-button (click)="delete()">{{deleteButton}}</a>
+          <a mat-button>{{favoritesButton}}</a>
+        </div>
+      </div>
+      <div>
+        <div class="product-quantity">
+          <div class="flex-items">
+            <button (click)="decrement()">
+              <mat-icon class="button-1">remove</mat-icon>
+            </button>
+          </div>
+          <div class="flex-items">
+            <input #numberInput [(ngModel)]="quantity" min="1" type="number" [readOnly]="quantity"/>
+          </div>
+          <div class="flex-items">
+            <button (click)="increment()">
+              <mat-icon class="button-2">add</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p>{{product.price}} each. </p>
+      </div>
+      <div>
+        <p>{{updatedPrice}}</p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+

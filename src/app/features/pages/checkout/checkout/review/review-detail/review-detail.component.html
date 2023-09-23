@@ -1,0 +1,72 @@
+<ng-container *ngIf="product">
+  <mat-card class="review-container top">
+    <mat-card-content class="review-product-items">
+      <div>
+        <img mat-card-sm-image [src]= product.image />
+      </div>
+      <div class="review-product-info">
+        <p class="center">{{product.title}}</p>
+        <p class="center">{{product.quantity}}</p>
+        <p class="center">{{product.price}}</p>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-content class="review-shipping-details">
+      <div class="review-shipping-item">
+        <div>
+          <p><b>Shipping Details:</b></p>
+          <a mat-button>Change</a>
+        </div>
+        <div>
+          <p>Delivers to:</p>
+          <p>302-2600 Jane Street</p>
+        </div>
+        <div>
+          <p>Contact information</p>
+
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-content class="review-payment-details">
+      <div class="review-payment-item">
+        <div>
+          <p><b>Payment Details:</b></p>
+          <a mat-button>Change</a>
+        </div>
+        <div>
+          <p>Pay in full with:</p>
+          <p>VISA**** 9304</p>
+        </div>
+        <div>
+          <p>Billing Address</p>
+          <p>Paschal Oduoza</p>
+          <p>2600 Jane Street</p>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-content>
+    <mat-card-content>
+      <p><b>Your total:</b></p>
+      <div class="review-price-items">
+        <div class="price-items1">
+          <div>
+            <p>Subtotal</p>
+            <p>Shipping</p>
+            <p>Estimated Tax</p>
+          </div>
+          <div>
+            <p>$1,466</p>
+            <p>Free</p>
+            <p>$168.48</p>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div class="price-items2">
+          <p><b>Total</b></p>
+          <p><b>$1,614.48</b></p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-container>

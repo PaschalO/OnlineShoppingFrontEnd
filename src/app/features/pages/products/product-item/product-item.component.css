@@ -1,0 +1,30 @@
+.inner-container {
+    display:grid;
+    grid-auto-rows: 370px;
+}
+
+.product-card {
+    display: flex;
+    padding: 1rem;
+    justify-content: space-between;
+}
+
+img {
+    height: 200px;
+    width: 100%;
+    object-fit: contain;
+
+}
+
+.product-title {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.product-button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
