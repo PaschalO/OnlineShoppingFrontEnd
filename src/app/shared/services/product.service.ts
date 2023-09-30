@@ -8,9 +8,9 @@ import {map, Observable, of, pipe, tap} from "rxjs";
 })
 export class ProductService {
   private products: IProduct[] = [];
-  //private readonly productUrl: string = 'https://api.escuelajs.co/api/v1/products';
+  private readonly productUrl: string = 'https://api.escuelajs.co/api/v1/products';
   //private readonly productUrl: string = 'https://dummyjson.com/products';
-  private readonly productUrl: string = 'https://fakestoreapi.com/products';
+  //private readonly productUrl: string = 'https://fakestoreapi.com/products';
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<IProduct[]> {

@@ -7,17 +7,19 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../../../shared/shared.module";
 import { ReviewListComponent } from './checkout/review/review-list/review-list.component';
 import { ReviewDetailComponent } from './checkout/review/review-detail/review-detail.component';
+import {CheckoutFormComponent} from "./checkout/checkout-form/checkout-form.component";
 
 
 
 
 @NgModule({
-  declarations: [
-      CheckoutComponent,
-      PaymentFormComponent,
-      ReviewListComponent,
-      ReviewDetailComponent
-  ],
+	declarations: [
+		CheckoutComponent,
+		PaymentFormComponent,
+		ReviewListComponent,
+		ReviewDetailComponent,
+		CheckoutFormComponent
+	],
     imports: [
         CommonModule,
         AngularMaterialModule,

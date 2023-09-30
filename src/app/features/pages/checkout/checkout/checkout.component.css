@@ -95,6 +95,13 @@
     margin-top: 1rem;
 }
 
+
+.radio-button-address {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 @media only screen and (max-width:768px) {
     .checkout-inner-container {
         display: flex;

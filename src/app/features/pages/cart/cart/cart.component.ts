@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ICart, IProduct} from "../../products/product-spec";
-import {combineLatest, filter, map, Observable, of, tap} from "rxjs";
-import {ProductService} from "../../../../shared/services/product.service";
+import {Observable, tap} from "rxjs";
 import {CartService} from "../../../../shared/services/cart-service";
 
 @Component({
@@ -21,7 +20,9 @@ export class CartComponent implements OnInit{
   }
 
   displayShoppingCart() {
-    this.filteredProductList$ = this.cartService.showCart();
+    this.filteredProductList$ = this.cartService.showCart().pipe(
+        tap(value => console.log(value))
+    );
   }
 
   onDeleteItem(id: number) {

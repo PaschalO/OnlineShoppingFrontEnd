@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {LocalStorageService} from "./local-storage.service";
-import {BehaviorSubject, combineLatest, filter, map, Observable, of, tap} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable, of} from "rxjs";
 import {ICart, IProduct} from "../../features/pages/products/product-spec";
 import {ProductService} from "./product.service";
 
@@ -58,40 +58,108 @@ export class CartService {
     }
   }
 
-  // for product detail component
   addToCart(id: number | undefined, quantity: number = 1): void {
-    // check if the items are already in the cart
-    if (this.cart.length > 0) {
-      const product: ICart | undefined = this.cart.find(product => product.id === id);
-      // adding more than 1 item for the specific product
-      if (product && quantity > 1) {
-        product.quantity = product.quantity + quantity
-      }
-
-      // adding just 1 item for the product
-      else if (product && (quantity === 1)) {
-        product.quantity = product.quantity + 1
-      }
-
-      else {
-        if (id) this.cart = [ ...this.cart, {id, quantity} ]
-      }
+    this.cart = this.cartItems;
+    // for product list add to cart button
+    if (!this.cart) {
+      if (id) this.cart = [ {id, quantity} ]
     }
 
     else {
-      // pushing new items to the cart
-      if (id) this.cart = [ ...this.cart, {id, quantity} ];
+      // if we have items in the cart and the product is not in the item, add it
+      const items: ICart | undefined = this.cart.find(item => item.id === id);
+      if (!items) {
+        if (id) this.cart = [ ...this.cart, {id, quantity} ]
+      }
+
+      // if the product is already in the cart,
+      else {
+        items.quantity = items.quantity + quantity;
+        //this.cart = this.cartItems
+        //const items: ICart | undefined = this.cart.find(item => item.id === id);
+        // if (items) {
+        //   items.quantity = items.quantity + quantity;
+        // }
+
+      }
     }
 
     this.cartItems = this.cart;
-    this.itemCount = this.totalQuantity(this.cart);
+    this.itemCount = this.totalQuantity(this.cartItems);
+
   }
+  // for product detail component
+  // incrementProductQuantity(id: number | undefined, quantity: number = 1): void {
+  //   this.cart = this.cartItems;
+  //
+  //   if (this.cart.length < 1 ) {
+  //     if (id) this.cart = [ {id, quantity} ];
+  //   }
+  //
+  //   else {
+  //     const items: ICart | undefined = this.cart.find(item => item.id === id);
+  //     // we have something added to the cart
+  //
+  //     // step 1: if the product does not exist
+  //     // step 2: if the product exist and we want to increment the quantity some amount - for product detail
+  //     // step 3: if the product exists and we want to increment the quantity by 1
+  //
+  //     if (!items) {
+  //       if (id) this.cart = [ ...this.cart, {id, quantity} ]
+  //     }
+  //
+  //     else {
+  //       if (items) {
+  //         items.quantity = items.quantity + quantity;
+  //       }
+  //     }
+  //
+  //     this.cartItems = this.cart;
+  //     // console.log(this.cartItems, 'add to cart 2 for this.cartItems')
+  //     this.itemCount = this.totalQuantity(this.cartItems);
+  //
+  //   }
+    // this.cart = this.cartItems;
+    // //console.log(this.cart.length, 'addToCart from the cart service')
+    // // check if the items are already in the cart
+    // if (this.cart && this.cart.length > 0) {
+    //   const product: ICart | undefined = this.cart.find(product => product.id === id);
+    //   // adding more than 1 item for the specific product
+    //
+    //   if (product && quantity > 1) {
+    //     product.quantity = quantity;
+    //   }
+    //
+    //   // for product list add to cart component
+    //   else if (product && (quantity === 1)) {
+    //     product.quantity = product.quantity + 1;
+    //   }
+    //
+    //   // for product detail add to cart component
+    //   // if the product does not exist, but we have items in the cart
+    //   else {
+    //     if (id) this.cart = [ ...this.cart, {id, quantity} ]
+    //   }
+    // }
+    //
+    // else {
+    //   // pushing new items to the cart
+    //   //if (id) this.cart = [ ...this.cart, {id, quantity} ];
+    //   if (id) this.cart = [ {id, quantity} ];
+    // }
+    //
+    // this.cartItems = this.cart;
+    // console.log(this.cartItems, 'add to cart 2 for this.cartItems')
+    // this.itemCount = this.totalQuantity(this.cart);
+  //}
 
   totalQuantity(cart: ICart[]): number {
     return cart.reduce((previousValue: number, currentValue: ICart) => previousValue + currentValue.quantity, 0);
   }
 
   removeSingleItem(id: number | undefined, quantity: number = 1): void {
+    this.cart = this.cartItems;
+    console.log(this.cart.length, 'removeSingleItem from the cart service')
     if (this.cart.length > 0) {
       const product: ICart | undefined = this.cart.find(product => product.id === id);
 
@@ -100,11 +168,15 @@ export class CartService {
           return;
         }
 
-        this.cart = this.cart.map(item => {
-          if (item.id === id) {
-            return {...item, quantity: quantity}
-          } else return item;
-        });
+
+        product.quantity = quantity;
+
+
+        // this.cart = this.cart.map(item => {
+        //   if (item.id === id) {
+        //     return {...item, quantity: product.quantity}
+        //   } else return item;
+        // });
 
         this.cartItems = this.cart;
         this.itemCount = this.totalQuantity(this.cart);

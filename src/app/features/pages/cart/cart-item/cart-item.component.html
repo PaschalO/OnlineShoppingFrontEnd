@@ -31,10 +31,10 @@
         </div>
       </div>
       <div>
-        <p>{{product.price}} each. </p>
+        <p>{{product.price | currency: 'USD'}} each. </p>
       </div>
       <div>
-        <p>{{updatedPrice}}</p>
+        <p>{{updatedPrice | currency: 'USD' }}</p>
       </div>
     </div>
   </mat-card-content>

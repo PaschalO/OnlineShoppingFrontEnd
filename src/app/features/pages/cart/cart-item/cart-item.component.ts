@@ -2,6 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {ItemQuantityService} from "../../../../shared/services/item-quantity.service";
 import {ICart, IProduct} from "../../products/product-spec";
 import {CartService} from "../../../../shared/services/cart-service";
+import {OrderSummaryService} from "../../../../shared/services/order-summary.service";
 
 @Component({
   selector: 'app-cart-item',
@@ -12,7 +13,7 @@ export class CartItemComponent implements OnInit{
   @Input() product!: (ICart & IProduct) | null;
   @Output() deleteItem= new EventEmitter<number>();
   //price: number = 69;
-  updatedPrice: number | undefined;
+  updatedPrice!: number | undefined;
   //description: string = 'packages and web page editors now use Lorem Ipsum.';
   deleteButton: string = 'delete';
   favoritesButton: string = 'add to favorites';
@@ -22,19 +23,24 @@ export class CartItemComponent implements OnInit{
 
   @ViewChild('numberInput', {static: false}) numberInput!: ElementRef;
 
-  constructor(private itemQ: ItemQuantityService, private cartService: CartService) {}
+  constructor(private itemQ: ItemQuantityService, private cartService: CartService, private orderSummaryService: OrderSummaryService) {}
 
   ngOnInit(): void {
     this.quantity = this.product?.quantity;
-    this.updatedPrice = this.product?.price;
+    //this.updatedPrice = this.product?.price;
+    this.updatedPrice = this.updatePrice(this.product?.price, this.quantity)
+    //this.increment();
+    //this.decrement();
+    //this.orderSummaryService.orderSummaryPrice = this.updatedPrice;
   }
 
   increment(): void {
     this.itemQ.increment(this.numberInput.nativeElement, this.numberInput.nativeElement);
-
     if (this.quantity && this.product) {
       this.quantity = this.numberInput.nativeElement.value;
-      this.updatedPrice = this.updatePrice(this.product.price ,this.quantity);
+      this.updatedPrice = this.updatePrice(this.product.price, this.quantity);
+      //this.orderSummaryService.orderSummaryPrice = this.updatedPrice;
+      this.orderSummaryService.calculateTotal();
       this.cartService.addToCart(this.product.id);
     }
 
@@ -45,8 +51,11 @@ export class CartItemComponent implements OnInit{
     this.itemQ.decrement(this.numberInput.nativeElement, this.numberInput.nativeElement);
     if (this.quantity && this.product) {
       this.quantity = parseInt(this.numberInput.nativeElement.value);
-      this.updatedPrice = this.updatePrice(this.product.price ,this.quantity);
-      this.cartService.removeSingleItem(this.product.id, this.quantity);
+      //console.log(this.quantity)
+      this.updatedPrice = this.updatePrice(this.product.price, this.quantity);
+      //this.orderSummaryService.orderSummaryPrice = this.updatedPrice;
+      this.orderSummaryService.calculateTotal();
+      this.cartService.removeSingleItem(this.product.id, parseInt(String(this.quantity)));
     }
 
     else return;
@@ -62,4 +71,6 @@ export class CartItemComponent implements OnInit{
     }
     return 0;
   }
+
+
 }
