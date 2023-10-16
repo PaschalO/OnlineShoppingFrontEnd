@@ -5,16 +5,24 @@
         <mat-card class="card-radius">
           <mat-card-header>
             <span>{{title}}</span>
+            <pre>{{total | json }}</pre>
           </mat-card-header>
         </mat-card>
         <mat-divider></mat-divider>
         <app-cart-item
-          *ngFor="let cartProducts of products;" [product]="cartProducts" (deleteItem)="onDeleteItem($event)">
+          *ngFor="let cartProducts of products; let i = index"
+          [product]="cartProducts"
+          (deleteItem)="onDeleteItem($event)"
+
+        >
         </app-cart-item>
+
       </div>
       <div>
         <app-cart-subtotal></app-cart-subtotal>
       </div>
+      <pre>{{filteredProductList$ | async | json }}</pre>
+
     </div>
   </ng-container>
 </ng-container>

@@ -11,17 +11,19 @@ import {Observable} from "rxjs";
 
 export class CartSubtotalComponent implements OnInit{
   orderSummary: string = 'Order summary';
-  cartSubTotal!: Observable<number>;
+  //cartSubTotal!: Observable<number>;
+  cartSubTotal!: number;
   orderTotal: number = 90;
   buttonCheckout: string = 'proceed to checkout';
 
-  constructor(private orderSummaryService: OrderSummaryService) {}
+  constructor(private orderSummaryService: OrderSummaryService, private cartService: CartService) {}
 
   ngOnInit() {
     this.showOrderSummary();
   }
 
   showOrderSummary() {
-    this.cartSubTotal = this.orderSummaryService.calculateTotal();
+    this.cartSubTotal = this.cartService.calculateGrandTotalPrice();
+    //this.cartSubTotal = this.cartService.calculateTP();
   }
 }

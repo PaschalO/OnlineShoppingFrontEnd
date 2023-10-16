@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IProduct } from "../../features/pages/products/product-spec";
 import { HttpClient } from "@angular/common/http";
-import {map, Observable, of, pipe, tap} from "rxjs";
+import {map, Observable, of, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root' // registers the service

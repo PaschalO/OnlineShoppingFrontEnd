@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <span>{{ orderSummary }}</span>
-            <span>: {{ cartSubTotal | async | currency: "USD" }}</span>
+            <span>: {{ cartSubTotal | currency: "USD" }}</span>
             <mat-divider></mat-divider>
         </mat-card-title>
     </mat-card-header>
