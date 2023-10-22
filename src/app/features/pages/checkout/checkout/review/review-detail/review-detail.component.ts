@@ -7,7 +7,7 @@ import {ICart, IProduct} from "../../../../products/product-spec";
   styleUrls: ['./review-detail.component.css']
 })
 export class ReviewDetailComponent {
-  @Input() product!: (ICart & IProduct) | null
+  @Input() product!: ICart | null
   price: number = 69;
   quantity: number = 1;
   description: string = 'packages and web page editors now use Lorem Ipsum.';

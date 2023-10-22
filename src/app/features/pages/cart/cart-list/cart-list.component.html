@@ -1,30 +1,24 @@
-<ng-container *ngIf="filteredProductList$ | async as products">
-  <ng-container *ngIf="products.length">
-    <div class="card-container">
-      <div>
-        <mat-card class="card-radius">
-          <mat-card-header>
-            <span>{{title}}</span>
-            <pre>{{total | json }}</pre>
-          </mat-card-header>
-        </mat-card>
-        <mat-divider></mat-divider>
-        <app-cart-item
-          *ngFor="let cartProducts of products; let i = index"
-          [product]="cartProducts"
-          (deleteItem)="onDeleteItem($event)"
-
-        >
-        </app-cart-item>
-
-      </div>
-      <div>
-        <app-cart-subtotal></app-cart-subtotal>
-      </div>
-      <pre>{{filteredProductList$ | async | json }}</pre>
-
+<ng-container *ngIf="cartList && cartList.length">
+  <div class="card-container">
+    <div>
+      <mat-card class="card-radius">
+        <mat-card-header>
+          <span>{{title}}</span>
+        </mat-card-header>
+      </mat-card>
+      <mat-divider></mat-divider>
+      <app-cart-item
+        *ngFor="let cartProducts of cartList"
+        [product]="cartProducts"
+        (deleteItem)="removeItemFromCart($event)"
+      >
+      </app-cart-item>
     </div>
-  </ng-container>
+    <div>
+      <app-cart-subtotal></app-cart-subtotal>
+    </div>
+  </div>
 </ng-container>
+
 
 

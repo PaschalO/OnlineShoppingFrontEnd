@@ -8,6 +8,7 @@ import {CartService} from "../../../../shared/services/cart-service";
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.css']
 })
+
 export class ProductItemComponent {
   @Input() product: IProduct | undefined;
 
@@ -16,10 +17,9 @@ export class ProductItemComponent {
     this.router.navigate(['/products', id]);
   }
 
-  addToCart(productId: number | undefined): void {
-    if (productId){
-      this.cartService.addToCart(productId)
+  addToCart(product: IProduct): void {
+    if (product){
+      this.cartService.addToCart(product)
     }
-
   }
 }

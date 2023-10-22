@@ -8,6 +8,7 @@ import {SharedModule} from "../../../shared/shared.module";
 import { ReviewListComponent } from './checkout/review/review-list/review-list.component';
 import { ReviewDetailComponent } from './checkout/review/review-detail/review-detail.component';
 import {CheckoutFormComponent} from "./checkout/checkout-form/checkout-form.component";
+import { ReviewItemComponent } from './checkout/review/review-item/review-item.component';
 
 
 
@@ -18,7 +19,8 @@ import {CheckoutFormComponent} from "./checkout/checkout-form/checkout-form.comp
 		PaymentFormComponent,
 		ReviewListComponent,
 		ReviewDetailComponent,
-		CheckoutFormComponent
+		CheckoutFormComponent,
+  ReviewItemComponent
 	],
     imports: [
         CommonModule,

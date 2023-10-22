@@ -3,10 +3,9 @@ import {Injectable} from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class ItemQuantityService {
 
+export class CustomStepUpService {
   constructor() { }
-
   increment(inputElement: HTMLInputElement, value: HTMLInputElement): number {
     inputElement.stepUp();
     //const _value = value.value;

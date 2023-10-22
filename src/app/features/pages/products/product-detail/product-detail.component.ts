@@ -4,7 +4,7 @@ import {ProductService} from "../../../../shared/services/product.service";
 import {IProduct} from "../product-spec";
 import {Observable, tap} from "rxjs";
 import {CartService} from "../../../../shared/services/cart-service";
-import {ItemQuantityService} from "../../../../shared/services/item-quantity.service";
+import {CustomStepUpService} from "../../../../shared/services/custom-step-up.service";
 
 @Component({
   selector: 'app-product-detail',
@@ -16,7 +16,7 @@ export class ProductDetailComponent implements OnInit{
   product$: Observable<IProduct | null> | undefined;
   value: number = 1;
   @ViewChild('numberInput', {static: false}) numberInput!: ElementRef;
-  constructor(private route: ActivatedRoute, private ProductService: ProductService, private CartService: CartService, private itemQ: ItemQuantityService) {}
+  constructor(private route: ActivatedRoute, private ProductService: ProductService, private CartService: CartService, private itemQ: CustomStepUpService) {}
 
   ngOnInit(): void {
     this.getProduct();
@@ -41,7 +41,7 @@ export class ProductDetailComponent implements OnInit{
   addToCart(product: IProduct) {
     this.value = parseInt(this.numberInput.nativeElement.value);
     if (product){
-      this.CartService.addToCart(product.id, this.value)
+      this.CartService.addToCart(product, this.value);
     }
   }
 }

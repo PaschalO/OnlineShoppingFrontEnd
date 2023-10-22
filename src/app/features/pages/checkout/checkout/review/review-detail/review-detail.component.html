@@ -1,15 +1,6 @@
 <ng-container *ngIf="product">
   <mat-card class="review-container top">
-    <mat-card-content class="review-product-items">
-      <div>
-        <img mat-card-sm-image [src]= product.image />
-      </div>
-      <div class="review-product-info">
-        <p class="center">{{product.title}}</p>
-        <p class="center">{{product.quantity}}</p>
-        <p class="center">{{product.price}}</p>
-      </div>
-    </mat-card-content>
+    <app-review-item [product]="product"></app-review-item>
     <mat-divider></mat-divider>
     <mat-card-content class="review-shipping-details">
       <div class="review-shipping-item">
@@ -56,9 +47,9 @@
             <p>Estimated Tax</p>
           </div>
           <div>
-            <p>$1,466</p>
+            <p>{{product.price * product.quantity | currency: "USD"}}</p>
             <p>Free</p>
-            <p>$168.48</p>
+            <p>{{product.price * product.quantity * 0.13 | currency:  "USD"}}</p>
           </div>
         </div>
         <mat-divider></mat-divider>

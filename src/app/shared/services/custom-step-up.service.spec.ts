@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ItemQuantityService } from './item-quantity.service';
+import { CustomStepUpService } from './custom-step-up.service';
 
-describe('ItemQuantityService', () => {
-  let service: ItemQuantityService;
+describe('CustomStepUpService', () => {
+  let service: CustomStepUpService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ItemQuantityService);
+    service = TestBed.inject(CustomStepUpService);
   });
 
   it('should be created', () => {

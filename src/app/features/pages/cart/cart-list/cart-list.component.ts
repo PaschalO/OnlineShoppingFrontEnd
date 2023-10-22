@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ICart, IProduct} from "../../products/product-spec";
-import {map, Observable, of, tap} from "rxjs";
+import {ICart} from "../../products/product-spec";
 import {CartService} from "../../../../shared/services/cart-service";
-import {ItemQuantityService} from "../../../../shared/services/item-quantity.service";
+import {CustomStepUpService} from "../../../../shared/services/custom-step-up.service";
 
 @Component({
   selector: 'app-cart-list',
@@ -13,71 +12,21 @@ import {ItemQuantityService} from "../../../../shared/services/item-quantity.ser
 export class CartListComponent implements OnInit{
   title: string = 'Shopping Cart';
   total: number = 0;
-  //quantity!: number;
-  //index!: number
 
-  filteredProductList$!: Observable<((ICart & IProduct) | null)[]>
+  cartList: ICart[] | null = []
 
-  grandTotalPrice: Observable<number> | undefined;
-  constructor(private cartService: CartService, private itemQuantityService: ItemQuantityService) {}
+  constructor(private cartService: CartService, private itemQuantityService: CustomStepUpService) {}
 
   ngOnInit(): void {
-    this.filteredProductList$ = this.displayShoppingCart();
-    this.calculateGrandTotalPrice().subscribe((v) => {
-      this.total = v
-    });
-    //this.calculateGrandTotalPrice();
-    //this.updateProductQuantity(this.quantity, this.index)
+    this.cartList = this.displayShoppingCart();
+    this.total = this.cartService.calculateGrandTotalPrice();
   }
 
   displayShoppingCart() {
-    return this.cartService.productItem.pipe(
-        tap(value => console.log(value, 'from cart-list'))
-    );
+    return this.cartService.displayItemsInCart();
   }
 
-  onDeleteItem(id: number) {
-    this.filteredProductList$ = this.cartService.removeItem(id)
+  removeItemFromCart(id: number) {
+    this.cartList = this.cartService.removeProductFromCart(id)
   }
-  calculateGrandTotalPrice() {
-    return this.filteredProductList$.pipe(
-      map(v=> {
-        return v.filter((s) => s !== null).reduce((total, product) => {
-          if (product) {
-            return total + (product.price * product.quantity)
-          }
-
-          else return total;
-        }, 0)
-      })
-    )
-  }
-
-  // updateProductQuantity(quantity: number, index: number) {
-  //   console.log(index, 'index');
-  //   console.log(quantity, 'quantity');
-  //   //this.index = index;
-  //   //this.quantity = quantity;
-  //
-  //   const hello =  this.filteredProductList$.pipe(
-  //     map((products) => {
-  //       const product =  products.find((product, i) => i === index);
-  //         tap(value => console.log(value))
-  //         //console.log(i, 'index')
-  //         if (product) {
-  //           product.quantity = this.quantity;
-  //
-  //           return product;
-  //           //
-  //           //return {...product, quantity}
-  //         }
-  //         return product;
-  //     })
-  //   )
-  //
-	//   this.calculateGrandTotalPrice();
-  //   this.displayShoppingCart();
-  //   return hello;
-  //
-  // }
 }

@@ -2,13 +2,13 @@
     <mat-card-header>
         <mat-card-title>
             <span>{{ orderSummary }}</span>
-            <span>: {{ cartSubTotal | currency: "USD" }}</span>
             <mat-divider></mat-divider>
         </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <span>Order Total</span>
-        <span> {{ orderTotal }}</span>
+        <span>SubTotal: {{ showOrderSummary() | currency: "USD" }}</span>
+        <span>Estimated Tax {{ 0.13 | percent }}:  {{showOrderSummary() * 0.13 | currency: "USD" }}</span>
+        <span>Estimated Total:  {{ showOrderSummary() * 1.13 | currency: "USD" }} </span>
     </mat-card-content>
     <mat-card-actions>
         <button mat-stroked-button>{{ buttonCheckout }}</button>

@@ -8,17 +8,18 @@ import {CartService} from "../../../../../../shared/services/cart-service";
   templateUrl: './review-list.component.html',
   styleUrls: ['./review-list.component.css']
 })
+
 export class ReviewListComponent implements OnInit{
 
-  productItems$!: Observable<((ICart & IProduct) | null)[]>;
+  productItems: ICart[] | null = [];
   constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
-    this.productItems$ = this.viewCartItems();
+    this.productItems = this.viewCartItems();
   }
 
-  viewCartItems(): Observable<((ICart & IProduct) | null)[]> {
-    return this.cartService.showCart();
+  viewCartItems(): ICart[] | null {
+    return this.cartService.displayItemsInCart();
   }
 
   productTrackBy(index: number, product: (ICart & IProduct) | null) {
