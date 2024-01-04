@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { ProductsModule } from "./features/pages/products/products.module";
-import {FormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthenticationModule} from "./authentication/authentication.module";
-import {RouterOutlet} from "@angular/router";
+import { RouterOutlet } from "@angular/router";
 import { AppRoutingModule } from './app-routing.module';
 import { CartModule } from "./features/pages/cart/cart.module";
 import { SharedModule } from "./shared/shared.module";
@@ -36,4 +36,5 @@ import { CheckoutModule } from "./features/pages/checkout/checkout.module";
     ],
     bootstrap: [AppComponent] // list on the components that should be known too angular to check and render
 })
+
 export class AppModule { }

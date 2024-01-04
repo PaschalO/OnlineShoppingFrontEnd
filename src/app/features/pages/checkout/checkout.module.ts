@@ -6,7 +6,6 @@ import {AngularMaterialModule} from "../../../angularMaterial/angularMaterial.mo
 import {ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../../../shared/shared.module";
 import { ReviewListComponent } from './checkout/review/review-list/review-list.component';
-import { ReviewDetailComponent } from './checkout/review/review-detail/review-detail.component';
 import {CheckoutFormComponent} from "./checkout/checkout-form/checkout-form.component";
 import { ReviewItemComponent } from './checkout/review/review-item/review-item.component';
 
@@ -18,7 +17,6 @@ import { ReviewItemComponent } from './checkout/review/review-item/review-item.c
 		CheckoutComponent,
 		PaymentFormComponent,
 		ReviewListComponent,
-		ReviewDetailComponent,
 		CheckoutFormComponent,
   ReviewItemComponent
 	],

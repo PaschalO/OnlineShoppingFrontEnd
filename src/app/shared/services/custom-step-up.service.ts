@@ -6,15 +6,15 @@ import {Injectable} from '@angular/core';
 
 export class CustomStepUpService {
   constructor() { }
-  increment(inputElement: HTMLInputElement, value: HTMLInputElement): number {
+  increment(inputElement: HTMLInputElement, _input: HTMLInputElement): number {
     inputElement.stepUp();
     //const _value = value.value;
-	  return parseInt(value.value);
+	  return parseInt(_input.value);
   }
 
-  decrement(inputElement: HTMLInputElement, value: HTMLInputElement): number {
+  decrement(inputElement: HTMLInputElement, _input: HTMLInputElement): number {
     inputElement.stepDown();
     //const _value = value.value;
-    return parseInt(value.value);
+    return parseInt(_input.value);
   }
 }

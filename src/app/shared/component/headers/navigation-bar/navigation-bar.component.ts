@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {CartService} from "../../../services/cart-service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-navigation-bar',
@@ -7,6 +8,9 @@ import {CartService} from "../../../services/cart-service";
   styleUrls: ['./navigation-bar.component.css']
 })
 export class NavigationBarComponent {
+  constructor(public cartService: CartService, private router: Router) {}
 
-  constructor(public cartService: CartService) {}
+  navigateToLoginForm() {
+    this.router.navigate(['account/sign-in'])
+  }
 }

@@ -1,5 +1,5 @@
 <div [formGroup]="parent" class="checkout-form-container">
-    <div>
+    <div class="row">
         <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
             <input matInput type="text" placeholder="first name" formControlName="firstName" required/>
@@ -15,7 +15,7 @@
             </ng-container>
         </mat-form-field>
     </div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" style="width:100%">
         <mat-label>Address</mat-label>
         <input matInput type="text" placeholder="address" formControlName="address" required/>
         <ng-container *ngIf="parent.controls['address'].invalid && parent.controls['address'].touched">

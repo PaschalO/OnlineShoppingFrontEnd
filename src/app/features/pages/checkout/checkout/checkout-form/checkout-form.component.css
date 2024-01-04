@@ -1,29 +1,26 @@
 .checkout-form-container {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .row {
-    display: flex;
-    gap: 1rem;
-    flex: 1;
+  display: flex;
 }
 
-.row mat-form-field {
-    flex: 1;
+.checkout-form-container .row {
+  display: flex;
+  gap: 1rem;
 }
 
-.checkout-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+mat-form-field {
+  width: 50%;
 }
 
 .checkout-form-title {
-    margin-bottom: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 
 .checkout-form mat-card {
-    border: 1px solid #F5F5F5;
-    border-radius: 0;
+  border: 1px solid #F5F5F5;
+  border-radius: 0;
 }

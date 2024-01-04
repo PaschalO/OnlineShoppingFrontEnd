@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ICart} from "../../products/product-spec";
 import {CartService} from "../../../../shared/services/cart-service";
-import {CustomStepUpService} from "../../../../shared/services/custom-step-up.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-cart-list',
@@ -11,15 +11,12 @@ import {CustomStepUpService} from "../../../../shared/services/custom-step-up.se
 
 export class CartListComponent implements OnInit{
   title: string = 'Shopping Cart';
-  total: number = 0;
-
-  cartList: ICart[] | null = []
-
-  constructor(private cartService: CartService, private itemQuantityService: CustomStepUpService) {}
+  cartList: ICart[] | null = [];
+  buttonCheckout: string = 'proceed to checkout';
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
     this.cartList = this.displayShoppingCart();
-    this.total = this.cartService.calculateGrandTotalPrice();
   }
 
   displayShoppingCart() {
@@ -28,5 +25,16 @@ export class CartListComponent implements OnInit{
 
   removeItemFromCart(id: number) {
     this.cartList = this.cartService.removeProductFromCart(id)
+  }
+
+  displayTotalPrice(): number {
+    return this.cartService.calculateGrandTotalPrice();
+  }
+  showCheckOutPage(): void {
+    this.router.navigate(['/checkout']);
+  }
+
+  displayTotalQuantity(): number {
+    return this.cartService.calculateTotalQuantity();
   }
 }

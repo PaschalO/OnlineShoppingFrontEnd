@@ -1,4 +1,64 @@
-<app-review-detail
-  *ngFor="let product of productItems trackBy:productTrackBy"
-  [product]="product"
-></app-review-detail>
+<mat-card>
+  <mat-card-content>
+    <app-review-item
+      *ngFor="let product of productItems"
+      [product]="product"
+    ></app-review-item>
+    <mat-card-content>
+      <div class="review-customer-information">
+        <div  class="item1">
+          <p><b>Shipping Details</b></p>
+        </div>
+        <div class="item2">
+          <p>Delivers to</p>
+          <p>{{showShippingCustomerDetails().get('firstName')?.value}} {{showShippingCustomerDetails().get('lastName')?.value}}</p>
+          <p>{{showShippingCustomerDetails().get('unit')?.value}} {{showShippingCustomerDetails().get('address')?.value}}</p>
+          <p>
+            {{showShippingCustomerDetails().get('city')?.value}},
+            {{showShippingCustomerDetails().get('province')?.value}}
+            {{showShippingCustomerDetails().get('postalCode')?.value}}
+          </p>
+        </div>
+        <div class="item3">
+          <p>Contact information</p>
+        </div>
+        <div class="item4">
+          <p><b>Payment Details</b></p>
+        </div>
+        <div class="item5">
+          <p>Pay in full with:</p>
+          <p>VISA**** 9304</p>
+        </div>
+        <div class="item6">
+          <p>Billing Address</p>
+          <p>{{showBillingCustomerDetails().get('firstName')?.value}} {{showBillingCustomerDetails().get('lastName')?.value}}</p>
+          <p>{{showBillingCustomerDetails().get('unit')?.value}} {{showBillingCustomerDetails().get('address')?.value}}</p>
+        </div>
+        <div class="item7">
+          <p><b>Summary</b></p>
+        </div>
+        <div class="item8">
+          <p>Subtotal</p>
+          <p>Shipping</p>
+          <p>Estimated Tax</p>
+        </div>
+        <div class="item9">
+          <p>{{ showTotalPrice() | currency: "USD" }}</p>
+          <p>{{shipping}}</p>
+          <p>{{showTotalPrice() * tax | currency: "USD" }}</p>
+        </div>
+        <div class="item10">
+          <mat-divider></mat-divider>
+        </div>
+        <div class="item11">
+          <p><b>Total</b></p>
+          <p><b>{{ (showTotalPrice() * tax) + (showTotalPrice()) + shipping | currency: "USD" }}</b></p>
+        </div>
+      </div>
+      <ng-content></ng-content>
+      <button mat-stroked-button class="center" type="submit" (click)="onSubmitForm()">Place Order</button>
+    </mat-card-content>
+  </mat-card-content>
+</mat-card>
+
+

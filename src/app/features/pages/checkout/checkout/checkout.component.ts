@@ -1,52 +1,63 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup,Validators} from "@angular/forms";
-import {BreakpointObserver} from "@angular/cdk/layout";
+import {Component } from '@angular/core';
+import {FormGroup} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
+import {CartService} from "../../../../shared/services/cart-service";
+import {CheckoutService} from "../../../../shared/services/checkout.service";
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit{
+
+export class CheckoutComponent {
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
 
-  address: string = '';
-  contactNumber: number = 0;
-  unit: string = '';
-  city: string = '';
-  province: string = '';
-  postalCode: string = '';
-
-  controls = {
-    firstName: ['', [Validators.required]],
-    lastName: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    country: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    unit: [''],
-    city: ['', [Validators.required]],
-    province: ['', [Validators.required]],
-    postalCode: ['', [Validators.required, Validators.maxLength(6)]],
-    phoneNumber: ['', [ Validators.required, Validators.pattern(/^(\+\d{1,3}[- ]?)?\d{10}$/) ]]
-  }
-  constructor(private _fb: FormBuilder, breakpointObserver: BreakpointObserver) {
-    this.firstFormGroup = this._fb.group(this.controls);
-
-    this.secondFormGroup = this._fb.group(
-      {
-          ...this.controls,
-          card: ['', [Validators.required]],
-          expiry: ['', [Validators.required]],
-          securityCode: ['', [Validators.required]],
-          paymentAddress: ['']
-      });
+  constructor(private checkoutService: CheckoutService, private cartService: CartService) {
+    this.firstFormGroup = this.checkoutService.firstFormData;
+    this.secondFormGroup = this.checkoutService.secondFormData;
   }
 
-  ngOnInit() {
+  onAddressSelectionChange() {
+    if (this.secondFormGroup.controls['billingAddress'].value === '1' ) {
+      this.secondFormGroup.patchValue(this.firstFormGroup.value);
+    }
 
+    else {
+      this.secondFormGroup.patchValue({
+        firstName: '',
+        lastName: '',
+        email: '',
+        country: '',
+        address: '',
+        unit: '',
+        city: '',
+        province: '',
+        postalCode: '',
+        phoneNumber: '',
+        billingAddress: '2'
+      })
+    }
   }
+
+  showTotalPrice(): number {
+    return this.cartService.calculateGrandTotalPrice();
+  }
+
+  showTotalItemQuantity() {
+    return this.cartService.calculateTotalQuantity();
+  }
+
+  showShippingFormCustomerDetails() {
+    return this.checkoutService.firstFormData;
+  }
+
+  /**
+   *
+   *  Validating input forms
+   *
+   * **/
 
   getEmailError(): "required" | "invalid" | '' {
     const emailError = this.firstFormGroup.controls['email'];
@@ -96,45 +107,20 @@ export class CheckoutComponent implements OnInit{
     return '';
   }
 
-	getSecurityNumber(): 'required' | ''  {
-		const cardSecurityNumberField = this.secondFormGroup.controls['securityCode'];
-		if (cardSecurityNumberField.hasError('required')) return 'required';
-		return '';
-	}
-
-  hideBillingAddress() {
-    const addressSelection = this.secondFormGroup.controls['paymentAddress'];
-    return addressSelection.value;
+  getSecurityNumber(): 'required' | ''  {
+    const cardSecurityNumberField = this.secondFormGroup.controls['securityCode'];
+    if (cardSecurityNumberField.hasError('required')) return 'required';
+    return '';
   }
-
-  hideShippingAddress() {
-    this.unit = this.firstFormGroup.controls['unit'].value;
-
-	  if (this.unit) {
-      this.address = `${this.firstFormGroup.controls['unit'].value}-${this.firstFormGroup.controls['address'].value}`;
-    }
-
-    else {
-      this.address = this.firstFormGroup.controls['address'].value;
-    }
-
-	  this.contactNumber = this.firstFormGroup.controls['phoneNumber'].value;
-    this.postalCode = this.firstFormGroup.controls['postalCode'].value;
-    this.province = this.firstFormGroup.controls['province'].value;
-    this.city = this.firstFormGroup.controls['city'].value;
-    return this.secondFormGroup.controls['paymentAddress'].value;
-  }
-
 
   nextButton(stepper: MatStepper): void {
-    const currentForm = stepper.selectedIndex === 0 ? this.firstFormGroup : this.secondFormGroup;
+    const currentForm = stepper.selectedIndex === 1 ? this.firstFormGroup : this.secondFormGroup;
     if (currentForm.valid) {
       stepper.next();
     }
 
     else {
       for (const key in currentForm.controls) {
-        console.log(currentForm.value.firstName)
         currentForm.controls[key].markAsTouched();
       }
     }

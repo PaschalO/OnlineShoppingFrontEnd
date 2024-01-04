@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {ProductService} from "../../../../shared/services/product.service";
 import {IProduct} from "../product-spec";
-import {Observable, tap} from "rxjs";
+import {Observable} from "rxjs";
 import {CartService} from "../../../../shared/services/cart-service";
 import {CustomStepUpService} from "../../../../shared/services/custom-step-up.service";
 
@@ -28,20 +28,17 @@ export class ProductDetailComponent implements OnInit{
 
   increment(): void {
     this.itemQ.increment(this.numberInput.nativeElement, this.numberInput.nativeElement.value)
-    //this.numberInput.nativeElement.stepUp();
-    //this.value s= this.numberInput.nativeElement.value;
   }
 
   decrement(): void {
     this.itemQ.decrement(this.numberInput.nativeElement, this.numberInput.nativeElement.value)
-    //this.numberInput.nativeElement.stepDown();
-    //this.value = this.numberInput.nativeElement.value;
   }
 
   addToCart(product: IProduct) {
     this.value = parseInt(this.numberInput.nativeElement.value);
     if (product){
       this.CartService.addToCart(product, this.value);
+      this.numberInput.nativeElement = 1;
     }
   }
 }

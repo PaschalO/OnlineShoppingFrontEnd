@@ -1,0 +1,20 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4rem;
+}
+
+.large-card {
+  width: 40%;
+}
+
+.loginContent {
+  margin-top: 2rem;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}

@@ -15,7 +15,14 @@
       </app-cart-item>
     </div>
     <div>
-      <app-cart-subtotal></app-cart-subtotal>
+      <app-cart-subtotal>
+        <mat-card-content>
+          <span>SubTotal: items({{displayTotalQuantity()}}): {{displayTotalPrice() | currency: "USD"}}</span>
+        </mat-card-content>
+        <mat-card-actions>
+          <button (click)="showCheckOutPage()" mat-stroked-button>{{ buttonCheckout }}</button>
+        </mat-card-actions>
+      </app-cart-subtotal>
     </div>
   </div>
 </ng-container>

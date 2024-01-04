@@ -2,6 +2,12 @@
     <app-product-item
             *ngFor="let product of (productList$ | async);
             trackBy:productTrackBy"
-            [product]="product">
+            [product]="product"
+    >
     </app-product-item>
 </div>
+
+<!--
+*ngFor="let product of (productList$ | async);
+trackBy:productTrackBy"
+[product]="product">-->
