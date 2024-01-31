@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import { HttpClient } from "@angular/common/http";
+import {AuthService} from "@auth0/auth0-angular";
 
 @Component({
   selector: 'app-log-in',
@@ -10,34 +11,49 @@ import { HttpClient } from "@angular/common/http";
 })
 export class LogInComponent {
 
-  loginFormGroup: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {
-    this.loginFormGroup = this.fb.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: ['', Validators.required]
-    })
+  constructor(public auth: AuthService) {}
+
+  loginWithRedirect() {
+    this.auth.loginWithRedirect();
   }
 
-  navigateToSignUpForm() {
-    this.router.navigate(['account/create-an-account'])
+  logout() {
+    this.auth.logout();
   }
+    // this.loginFormGroup = this.fb.group({
+    //   email: ['', [Validators.email, Validators.required]],
+    //   password: ['', Validators.required]
+    // })
 
-  login() {
-    const existingCustomer = this.loginFormGroup;
 
-    if (existingCustomer.valid) {
-      // submit the form to the backend
-      console.log(existingCustomer.value);
-      this.http.post<object>('', existingCustomer.value).subscribe({
-        next: (response => console.log('form has been submitted!', response)),
-        error: (error => console.log('We found an error in submitting this form', error))
-      })
-    }
+  //loginFormGroup: FormGroup;
+  // constructor(private fb: FormBuilder, private router: Router, private http: HttpClient) {
+  //   // this.loginFormGroup = this.fb.group({
+  //   //   email: ['', [Validators.email, Validators.required]],
+  //   //   password: ['', Validators.required]
+  //   // })
+  // }
 
-    else {
-      for (const key in this.loginFormGroup.controls) {
-        this.loginFormGroup.controls[key].markAsTouched();
-      }
-    }
-  }
+  // navigateToSignUpForm() {
+  //   this.router.navigate(['account/create-an-account'])
+  // }
+
+  // login() {
+  //   const existingCustomer = this.loginFormGroup;
+  //
+  //   if (existingCustomer.valid) {
+  //     // submit the form to the backend
+  //     console.log(existingCustomer.value);
+  //     this.http.post<object>('', existingCustomer.value).subscribe({
+  //       next: (response => console.log('form has been submitted!', response)),
+  //       error: (error => console.log('We found an error in submitting this form', error))
+  //     })
+  //   }
+  //
+  //   else {
+  //     for (const key in this.loginFormGroup.controls) {
+  //       this.loginFormGroup.controls[key].markAsTouched();
+  //     }
+  //   }
+  // }
 }

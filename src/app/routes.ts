@@ -1,36 +1,58 @@
 import { Routes } from '@angular/router';
-import {ProductListComponent} from "./features/pages/products/product-list/product-list.component";
-import {ProductDetailComponent} from "./features/pages/products/product-detail/product-detail.component";
-import {CartListComponent} from "./features/pages/cart/cart-list/cart-list.component";
-import {CheckoutComponent} from "./features/pages/checkout/checkout/checkout.component";
-import {SignUpComponent} from "./authentication/sign-up/sign-up.component";
-import {LogInComponent} from "./authentication/log-in/log-in.component";
+import {ConfirmationPageComponent} from "./features/pages/confirmation-page/confirmation-page.component";
 
 const routeConfig: Routes = [
   {
-    path: '',
-    component: ProductListComponent,
-  },
-  {
-    path: 'products/:id',
-    component: ProductDetailComponent,
+    path: 'products',
+    loadChildren: () => import('./features/pages/products/products.module').then(p => p.ProductsModule)
   },
   {
     path: 'cart',
-    component: CartListComponent
+    loadChildren: () => import('./features/pages/cart/cart.module').then(c => c.CartModule)
   },
   {
     path: 'checkout',
-    component: CheckoutComponent
+    loadChildren: () => import('./features/pages/checkout/checkout.module').then(x => x.CheckoutModule)
   },
   {
-    path: 'account/sign-in',
-    component: LogInComponent
+    path: 'confirmation-page',
+    loadChildren: () => import('./features/pages/confirmation-page/confirmation-page.module').then(y => y.ConfirmationPageModule)
   },
   {
-    path: 'account/create-an-account',
-    component: SignUpComponent
+    path: '**',
+    redirectTo: 'products'
   }
 ];
+// const routeConfig: Routes = [
+//   {
+//     path: '',
+//     component: ProductListComponent,
+//   },
+//   {
+//     path: 'products/:id',
+//     component: ProductDetailComponent,
+//   },
+//   {
+//     path: 'cart',
+//     component: CartListComponent
+//   },
+//   {
+//     path: 'checkout',
+//     component: CheckoutComponent,
+//     // canActivate: [AuthGuard]
+//   },
+//   {
+//     path: 'account/sign-in',
+//     component: LogInComponent
+//   },
+//   {
+//     path: 'account/create-an-account',
+//     component: SignUpComponent
+//   },
+//   {
+//     path: 'confirmation-page',
+//     component: ConfirmationPageComponent
+//   }
+// ];
 
 export default routeConfig;

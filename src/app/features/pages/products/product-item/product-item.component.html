@@ -1,13 +1,13 @@
 <ng-container *ngIf="product">
     <div class="inner-container">
         <mat-card class="product-card" role="group">
-            <img mat-card-image src="{{product.image}}" alt=""  />
+            <img alt="" mat-card-image src="{{product.image}}"/>
             <mat-card-content class="product-title">{{product.title}}</mat-card-content>
             <mat-card-content class="product-title">${{product.price}}</mat-card-content>
             <mat-card-actions>
                 <div class="product-button">
-                    <button mat-stroked-button (click)="addToCart(product)">Add to cart</button>
-                    <button mat-stroked-button (click)="showProduct(product.id)">View</button>
+                    <button (click)="addToCart(product)" mat-stroked-button>Add to cart</button>
+                    <button (click)="showProduct(product.id)" mat-stroked-button>View</button>
                 </div>
             </mat-card-actions>
         </mat-card>

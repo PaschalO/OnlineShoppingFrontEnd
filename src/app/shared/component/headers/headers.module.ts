@@ -5,7 +5,6 @@ import { HeaderComponent } from './header/header.component';
 import {AngularMaterialModule} from "../../../angularMaterial/angularMaterial.module";
 import { SearchFormComponent } from './search-form/search-form.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {MatBadgeModule} from "@angular/material/badge";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({

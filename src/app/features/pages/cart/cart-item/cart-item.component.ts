@@ -1,49 +1,41 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {CustomStepUpService} from "../../../../shared/services/custom-step-up.service";
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ICart} from "../../products/product-spec";
-import {CartService} from "../../../../shared/services/cart-service";
 
 @Component({
-  selector: 'app-cart-item',
-  templateUrl: './cart-item.component.html',
-  styleUrls: ['./cart-item.component.css']
+	selector: 'app-cart-item',
+	templateUrl: './cart-item.component.html',
+	styleUrls: ['./cart-item.component.css']
 })
 
-export class CartItemComponent implements OnInit{
-  @Input() product!: ICart | null;
-  @Output() deleteItem= new EventEmitter<number>();
-  @ViewChild('numberInput', {static: false}) numberInput!: ElementRef;
+export class CartItemComponent {
+	@Input() product!: ICart;
+	@Output() deleteItem: EventEmitter<number> = new EventEmitter<number>();
+	@Output() incrementItem: EventEmitter<ICart> = new EventEmitter<ICart>();
+	@Output() decrementItem: EventEmitter<{ product: ICart, quantity: number }> = new EventEmitter<{
+		product: ICart,
+		quantity: number
+	}>();
 
-  updatedPrice: number = 0;
-  deleteButton: string = 'delete';
-  quantity: number | undefined;
-  constructor(private itemQ: CustomStepUpService, private cartService: CartService) {}
+	@ViewChild('numberInput', {static: false}) numberInput!: ElementRef;
 
-  ngOnInit(): void {
-    this.quantity = this.product?.quantity;
-    this.updatedPrice = this.updatePrice(this.product?.price, this.quantity)
-  }
+	deleteButton: string = 'delete';
 
-  increment(): void {
-    this.quantity = this.itemQ.increment(this.numberInput.nativeElement, this.numberInput.nativeElement);
-    this.cartService.addToCart(this.product!);
-    this.updatedPrice = this.updatePrice(this.product?.price, this.quantity);
-  }
+	constructor() {
+	}
 
-  decrement(): void {
-    this.quantity = this.itemQ.decrement(this.numberInput.nativeElement, this.numberInput.nativeElement);
-    this.cartService.reduceItemQuantityFromCart(this.product!);
-    this.updatedPrice = this.updatePrice(this.product?.price, this.quantity);
-  }
+	incrementItemQuantityInCart(): void {
+		this.numberInput.nativeElement.stepUp(1);
+		this.product.quantity = parseInt(this.numberInput.nativeElement.value);
+		this.incrementItem.emit(this.product);
+	}
 
-   delete(): void {
-     this.deleteItem.emit(this.product?.id);
-   }
+	decrementItemQuantityInCart(): void {
+		this.numberInput.nativeElement.stepDown(1);
+		this.product.quantity = parseInt(this.numberInput.nativeElement.value);
+		this.decrementItem.emit({product: this.product, quantity: this.product.quantity});
+	}
 
-  updatePrice(price: number | undefined, quantity: number | undefined): number {
-    if (price && quantity) {
-      return price * quantity;
-    }
-    return 0;
-  }
+	delete(): void {
+		this.deleteItem.emit(this.product?.id);
+	}
 }

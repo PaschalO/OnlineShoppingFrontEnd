@@ -1,4 +1,4 @@
-<ng-container *ngIf="cartList && cartList.length">
+<ng-container *ngIf="cartList && cartList.length; else elseBlock">
   <div class="card-container">
     <div>
       <mat-card class="card-radius">
@@ -11,13 +11,15 @@
         *ngFor="let cartProducts of cartList"
         [product]="cartProducts"
         (deleteItem)="removeItemFromCart($event)"
+        (incrementItem)="incrementCartItem($event)"
+        (decrementItem)="decrementCartItem($event)"
       >
       </app-cart-item>
     </div>
     <div>
       <app-cart-subtotal>
         <mat-card-content>
-          <span>SubTotal: items({{displayTotalQuantity()}}): {{displayTotalPrice() | currency: "USD"}}</span>
+          <span>SubTotal: items ({{ totalItemsInCart }}): {{totalPriceInCart | currency: "USD"}}</span>
         </mat-card-content>
         <mat-card-actions>
           <button (click)="showCheckOutPage()" mat-stroked-button>{{ buttonCheckout }}</button>
@@ -26,6 +28,11 @@
     </div>
   </div>
 </ng-container>
+<ng-template #elseBlock>
+  <div class="card-container">
+    <h1 class="center">There are no items in your cart</h1>
+  </div>
+</ng-template>
 
 
 

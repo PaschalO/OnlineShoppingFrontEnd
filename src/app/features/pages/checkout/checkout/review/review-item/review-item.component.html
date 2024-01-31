@@ -1,0 +1,11 @@
+<ng-container *ngIf="product">
+  <mat-card-content class="review-product-items">
+    <div class="review-product-grid">
+      <img mat-card-sm-image [src]= product.image />
+      <p>{{product.title}}</p>
+      <p class="review-product-details">{{product.quantity}}</p>
+      <p class="review-product-details">{{product.price * product.quantity | currency: "USD"}}</p>
+    </div>
+    <mat-divider></mat-divider>
+  </mat-card-content>
+</ng-container>

@@ -1,0 +1,12 @@
+<div class="confirmation_page_container">
+    <h1>Success</h1>
+    <div class="confirmation_page__body">
+        <p *ngIf="customerData">
+            Thank you <b> {{ customerData["firstName"] }} {{ customerData["lastName"] }} </b>
+        </p>
+        <p>Your <b>{{(this.totalAmount * tax) + this.totalAmount + shipping | currency: "USD"}}</b> order is confirmed!
+        </p>
+        <p>Please allow <b>1-3 business</b> day(s) for shipping</p>
+        <button (click)="navigateToHomePage()" mat-button mat-stroked-button>{{ buttonName }}</button>
+    </div>
+</div>

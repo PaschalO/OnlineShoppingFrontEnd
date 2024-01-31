@@ -1,0 +1,17 @@
+.review-product-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.review-product-image {
+  justify-self: end;
+}
+
+.review-product-details {
+  justify-self: center;
+}
+

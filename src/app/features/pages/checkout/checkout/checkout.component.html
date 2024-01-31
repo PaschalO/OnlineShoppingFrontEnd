@@ -2,8 +2,8 @@
   <div class="checkout-inner-container">
     <mat-card>
       <mat-card-content>
-        <mat-stepper  linear #stepper>
-          <!-- step 1 -->
+        <mat-stepper #stepper>
+          <!-- stepper 1 -->
           <mat-step [stepControl]="firstFormGroup" label="Shipping">
             <form [formGroup]="firstFormGroup" class="checkout-form">
               <mat-form-field class="checkout-input" appearance="outline">
@@ -27,11 +27,12 @@
               </div>
             </form>
           </mat-step>
-          <!-- step 2 -->
+          <!-- stepper 2 -->
           <mat-step [stepControl]="secondFormGroup"  label="Payment">
             <div class="payment">
               <span>All transactions are secure and encrypted</span>
               <form [formGroup]="secondFormGroup" class="checkout-form">
+                <!-- Beginning of credit card form -->
                 <mat-card>
                   <mat-card-header class="checkout-form-title">
                     <mat-card-title>Credit card</mat-card-title>
@@ -63,6 +64,10 @@
                     </div>
                     <mat-divider></mat-divider>
                   </mat-card-content>
+
+                  <!-- End of credit card form -->
+
+                  <!-- Beginning of billing card form -->
                   <mat-card-header>
                     <mat-card-title>Billing address</mat-card-title>
                     <mat-card-subtitle>Select the address that is associated with your credit card.</mat-card-subtitle>
@@ -73,14 +78,17 @@
                         <mat-radio-button value="1">Same as shipping address</mat-radio-button>
                         <ng-container *ngIf="this.secondFormGroup.controls['billingAddress'].value === '1'">
                           <mat-card-content class="radio-button-address">
-                            <span>
-                              {{showShippingFormCustomerDetails().get('address')?.value}}
-                              {{showShippingFormCustomerDetails().get('city')?.value}}
-                              {{showShippingFormCustomerDetails().get('province')?.value}}
-                              {{showShippingFormCustomerDetails().get('postalCode')?.value}}
-                            </span>
-                            <span>{{showShippingFormCustomerDetails().get('contactNumber')?.value}}</span>
-                            <mat-divider></mat-divider>
+                            <ng-container *ngIf="shippingFormCustomer">
+                              <span>
+                                {{ shippingFormCustomer['address']}}
+                                {{ shippingFormCustomer['city']}}
+                                {{ shippingFormCustomer['province']}}
+                                {{ shippingFormCustomer['postalCode']}}
+                              </span>
+                              <span>
+                                {{ shippingFormCustomer['phoneNumber'] }}
+                              </span>
+                            </ng-container>
                           </mat-card-content>
                         </ng-container>
                         <mat-radio-button value="2">Use a different billing address</mat-radio-button>
@@ -94,7 +102,7 @@
                         </div>
                       </div>
                     </ng-container>
-<!--                    <pre>{{secondFormGroup.value | json}}</pre>-->
+
                     <div class="checkout-form-button">
                       <div class="row">
                         <button mat-stroked-button matStepperPrevious>Back to shipping</button>
@@ -106,6 +114,7 @@
               </form>
             </div>
           </mat-step>
+          <!-- End of billing card form -->
           <mat-step label="Review">
             <!-- step 3 -->
             <mat-card-header>
@@ -120,27 +129,30 @@
         </mat-stepper>
       </mat-card-content>
     </mat-card>
+    <!-- End of Stepper 3 -->
+    <!-- Beginning of order summary/cart subtotal component -->
     <app-cart-subtotal>
       <mat-card-content class="review-order-summary-details">
         <div class="row">
-          <span>Items in Cart ( {{showTotalItemQuantity()}} ) </span>
+          <span>Items in Cart ( {{ totalItemsInCart }} ) </span>
         </div>
         <div class="row">
           <span>SubTotal: </span>
-          <span>{{ showTotalPrice() | currency: "USD" }}</span>
+          <span>{{ totalPriceOfCart | currency: "USD" }}</span>
         </div>
         <div class="row">
 <!--          <span>Estimated Tax {{ 0.13 | percent }}: </span>-->
           <span>Estimated Tax:  </span>
-          <span>{{showTotalPrice() * 0.13 | currency: "USD" }}</span>
+          <span>{{ totalPriceOfCart * 0.13 | currency: "USD" }}</span>
         </div>
         <mat-divider></mat-divider>
         <div class="row">
           <span>Estimated Total:  </span>
-          <span>{{ showTotalPrice() * 1.13 | currency: "USD" }} </span>
+          <span>{{ totalPriceOfCart * 1.13 | currency: "USD" }} </span>
         </div>
       </mat-card-content>
     </app-cart-subtotal>
+    <!-- End of order summary/cart subtotal component -->
   </div>
 </div>
 

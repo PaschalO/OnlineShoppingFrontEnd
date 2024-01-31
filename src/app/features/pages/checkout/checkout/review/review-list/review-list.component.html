@@ -11,17 +11,29 @@
         </div>
         <div class="item2">
           <p>Delivers to</p>
-          <p>{{showShippingCustomerDetails().get('firstName')?.value}} {{showShippingCustomerDetails().get('lastName')?.value}}</p>
-          <p>{{showShippingCustomerDetails().get('unit')?.value}} {{showShippingCustomerDetails().get('address')?.value}}</p>
-          <p>
-            {{showShippingCustomerDetails().get('city')?.value}},
-            {{showShippingCustomerDetails().get('province')?.value}}
-            {{showShippingCustomerDetails().get('postalCode')?.value}}
-          </p>
+          <ng-container *ngIf="shippingFormCustomer">
+            <p>
+              {{ shippingFormCustomer["firstName"] }}
+              {{ shippingFormCustomer["lastName"] }}
+            </p>
+            <p>
+              {{ shippingFormCustomer["unit"] }}
+              {{ shippingFormCustomer["address"] }}
+            </p>
+            <p>
+              {{ shippingFormCustomer["city"] }}
+              {{ shippingFormCustomer["province"] }}
+              {{ shippingFormCustomer["postalCode"] }}
+            </p>
+          </ng-container>
         </div>
         <div class="item3">
           <p>Contact information</p>
+          <div *ngIf="billingFormCustomer">
+            {{ billingFormCustomer['phoneNumber'] }}
+          </div>
         </div>
+
         <div class="item4">
           <p><b>Payment Details</b></p>
         </div>
@@ -31,8 +43,16 @@
         </div>
         <div class="item6">
           <p>Billing Address</p>
-          <p>{{showBillingCustomerDetails().get('firstName')?.value}} {{showBillingCustomerDetails().get('lastName')?.value}}</p>
-          <p>{{showBillingCustomerDetails().get('unit')?.value}} {{showBillingCustomerDetails().get('address')?.value}}</p>
+          <ng-container *ngIf="billingFormCustomer">
+            <p>
+              {{ billingFormCustomer['firstName'] }}
+              {{ billingFormCustomer['lastName'] }}
+            </p>
+            <p>
+              {{ billingFormCustomer['unit'] }}
+              {{ billingFormCustomer['address'] }}
+            </p>
+          </ng-container>
         </div>
         <div class="item7">
           <p><b>Summary</b></p>
@@ -43,16 +63,16 @@
           <p>Estimated Tax</p>
         </div>
         <div class="item9">
-          <p>{{ showTotalPrice() | currency: "USD" }}</p>
-          <p>{{shipping}}</p>
-          <p>{{showTotalPrice() * tax | currency: "USD" }}</p>
+          <p>{{ totalPrice | currency: "USD" }}</p>
+          <p>{{ shipping }}</p>
+          <p>{{ totalPrice * tax | currency: "USD" }}</p>
         </div>
         <div class="item10">
           <mat-divider></mat-divider>
         </div>
         <div class="item11">
           <p><b>Total</b></p>
-          <p><b>{{ (showTotalPrice() * tax) + (showTotalPrice()) + shipping | currency: "USD" }}</b></p>
+          <p><b>{{ (totalPrice * tax) + (totalPrice) + shipping | currency: "USD" }}</b></p>
         </div>
       </div>
       <ng-content></ng-content>

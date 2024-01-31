@@ -1,126 +1,138 @@
 import {Injectable} from '@angular/core';
 import {LocalStorageService} from "./local-storage.service";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, map, Subscription} from "rxjs";
 import {ICart, IProduct} from "../../features/pages/products/product-spec";
 import {ProductService} from "./product.service";
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 
 export class CartService {
-  // pushes the total quantity to the consumers that needs it
-  private cartItem = new BehaviorSubject({
-    item: this.itemCount
-  });
 
-  public cartCount$ = this.cartItem.asObservable();
+	// pushes the total quantity to the consumers that needs it
+	private cartItem = new BehaviorSubject({
+		item: this.itemCount,
+	});
 
-  private cart: ICart[] = [];
+	public cartCount$ = this.cartItem.asObservable();
 
-  constructor(private localStorage: LocalStorageService, private productService: ProductService) {
-  }
+	private cart: ICart[] = [];
 
-  get itemCount(): number {
-    const itemCount = this.localStorage.getItem('item');
-    return itemCount ? parseInt(itemCount, 10) : 0;
-  }
+	constructor(private localStorage: LocalStorageService, private productService: ProductService) {
+	}
 
-  set itemCount(amount: number) {
-    this.localStorage.addItem('item', amount.toString());
-    this.cartItem.next({item: amount});
-  }
+	get itemCount(): number {
+		const itemCount = this.localStorage.getItem('item');
+		return itemCount ? parseInt(itemCount, 10) : 0;
+	}
 
-  // get cart array from localStorage
-  // @ts-ignore
-  get cartItems(): ICart[] {
-    try {
-      return JSON.parse(this.localStorage.getItem('cart') ?? '');
-    } catch (e) {
-      console.log(e);
-    }
-  }
+	set itemCount(amount: number) {
+		this.localStorage.addItem('item', amount.toString());
+		this.cartItem.next({item: amount});
+	}
 
-  // set cart array in localStorage
-  set cartItems(item: ICart[]) {
-    try {
-      this.localStorage.addItem('cart', JSON.stringify(item));
-    } catch (e) {
-      console.log(e);
-    }
-  }
+	// get cart array from localStorage
+	get cartItems(): ICart[] {
+		try {
+			return JSON.parse(this.localStorage.getItem('cart') || '[]');
+		} catch (e) {
+			console.log(e);
+			return [];
+		}
+	}
 
-  // clear cart from storage and reset the total quantity to 0
-  clearCart() {
-    try {
-      this.localStorage.deleteItem('item');
-      this.cartItem.next({item: 0});
-    } catch (e) {
-      console.log(e);
-    }
-  }
+	// set cart array in localStorage
+	set cartItems(item: ICart[]) {
+		try {
+			this.localStorage.addItem('cart', JSON.stringify(item));
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
-  addToCart(product: IProduct, quantity: number = 1): void {
-    const foundProduct = this.cart.find(items => items.id === product.id);
+	// clear cart from storage and reset the total quantity to 0
+	clearCart() {
+		try {
+			this.localStorage.deleteItem('cart');
+			this.localStorage.deleteItem('item');
+			this.cartItem.next({item: 0});
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
-    if (foundProduct) {
-      foundProduct.quantity += quantity;
-    } else {
-      this.cart.push({
-        ...product,
-        id: product.id,
-        quantity: quantity
-      })
-    }
-    this.cartItems = this.cart;
-    this.itemCount = this.calculateTotalQuantity();
-  }
+	addToCart(product: IProduct, quantity: number = 1): void {
+		this.cart = this.cartItems || [];
 
-  reduceItemQuantityFromCart(product: IProduct): void {
-    this.cart = this.cartItems;
-    const foundProduct = this.cart.find(items => items.id === product.id);
+		const foundProduct = this.cart.find(items => items.id === product.id);
 
-    if (foundProduct && foundProduct.quantity > 1) {
-      foundProduct.quantity = foundProduct.quantity - 1;
-      this.cartItems = this.cart;
-      this.itemCount = this.calculateTotalQuantity();
+		if (foundProduct) {
+			foundProduct.quantity += quantity;
+		} else {
+			this.cart.push({
+				...product,
+				id: product.id,
+				quantity: quantity
+			})
+		}
+		this.cartItems = this.cart;
+		this.itemCount = this.calculateTotalQuantity();
+		//this.isDisabledIcon;
+	}
 
-    } else {
-      return;
-    }
-  }
+	updateItemQuantityInCart(cartItem: ICart) {
+		this.cart = this.cartItems;
+		const foundProduct: ICart | undefined = this.cart.find(items => items.id === cartItem.id);
 
-  removeProductFromCart(id: number | undefined): ICart[] {
-    this.cart = this.cartItems;
+		if (foundProduct) {
+			foundProduct.quantity = cartItem.quantity;
+			this.cartItems = this.cart;
+			this.itemCount = this.calculateTotalQuantity();
+			//this.isDisabledIcon;
+		} else {
+			return;
+		}
+	}
 
-    if (id) {
-      this.cart = this.cart.filter(items => items.id !== id)
-      this.cartItems = this.cart;
-      this.itemCount = this.calculateTotalQuantity();
-    }
+	removeProductFromCart(id: number | undefined): ICart[] {
+		this.cart = this.cartItems;
 
-    return this.cartItems;
-  }
+		if (id) {
+			this.cart = this.cart.filter(items => items.id !== id)
+			this.cartItems = this.cart;
+			this.itemCount = this.calculateTotalQuantity();
+			//this.isDisabledIcon;
+		}
 
-  // calculate the totalQuantity in a cart
-  calculateTotalQuantity(): number {
-    return this.cartItems.reduce((previousValue: number, currentValue: ICart) => previousValue + currentValue.quantity, 0);
-  }
+		return this.cartItems;
+	}
 
-  calculateGrandTotalPrice(): number {
-    this.cart = this.cartItems;
-    return this.cart.reduce((previousValue: number, currentValue) => {
-      return previousValue + (currentValue.price * currentValue.quantity)
-    }, 0)
-  }
+	// calculate the totalQuantity in a cart
+	calculateTotalQuantity(): number {
+		return this.cartItems.reduce((previousValue: number, currentValue: ICart) => previousValue + currentValue.quantity, 0);
+	}
 
-  displayItemsInCart(): ICart[] | null {
-    const cart = this.cartItems;
+	calculateGrandTotalPrice(): number {
+		this.cart = this.cartItems || [];
+		return this.cart.reduce((previousValue: number, currentValue) => {
+			return previousValue + (currentValue.price * currentValue.quantity)
+		}, 0)
+	}
 
-    if (cart) {
-      return cart;
-    } else {
-      return null;
-    }
-  }
+	displayItemsInCart(): ICart[] | null {
+		const cart = this.cartItems;
+
+		if (cart) {
+			return cart;
+		} else {
+			return null;
+		}
+	}
+
+	disableCartIcon() {
+		return this.cartCount$.pipe(
+			map(value => value.item > 0)
+		)
+	}
 }

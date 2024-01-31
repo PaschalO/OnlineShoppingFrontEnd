@@ -17,15 +17,15 @@
       <div class="grid-items">
         <div class="product-quantity">
           <div class="flex-items">
-            <button (click)="decrement()">
+            <button (click)="decrementItemQuantityInCart()">
               <mat-icon class="button-1">remove</mat-icon>
             </button>
           </div>
           <div class="flex-items">
-            <input #numberInput [(ngModel)]="quantity" min="1" type="number" [readOnly]="quantity"/>
+            <input #numberInput [ngModel]="product.quantity" min="0" type="number" [readOnly]="product.quantity" #hello/>
           </div>
           <div class="flex-items">
-            <button (click)="increment()">
+            <button (click)="incrementItemQuantityInCart()">
               <mat-icon class="button-2">add</mat-icon>
             </button>
           </div>
@@ -35,9 +35,11 @@
         <p>{{product.price | currency: 'USD'}} each. </p>
       </div>
       <div class="grid-items">
-        <p>{{ updatedPrice | currency: 'USD' }}</p>
+        <p>{{ product.price * product.quantity | currency: 'USD' }}</p>
+
       </div>
     </div>
   </mat-card-content>
 </mat-card>
+
 

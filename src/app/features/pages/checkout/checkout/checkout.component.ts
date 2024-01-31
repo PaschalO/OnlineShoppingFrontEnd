@@ -1,8 +1,9 @@
-import {Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
 import {CartService} from "../../../../shared/services/cart-service";
 import {CheckoutService} from "../../../../shared/services/checkout.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-checkout',
@@ -10,15 +11,31 @@ import {CheckoutService} from "../../../../shared/services/checkout.service";
   styleUrls: ['./checkout.component.css']
 })
 
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit, OnDestroy{
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  totalPriceOfCart: number = 0;
+  totalItemsInCart: number = 0;
+  shippingFormCustomer: Record<string, string> | undefined;
+
+  private shippingFormSubscription$: Subscription | undefined;
 
   constructor(private checkoutService: CheckoutService, private cartService: CartService) {
     this.firstFormGroup = this.checkoutService.firstFormData;
     this.secondFormGroup = this.checkoutService.secondFormData;
   }
 
+  ngOnInit() {
+    this.totalPriceOfCart = this.showTotalPrice();
+    this.totalItemsInCart = this.showTotalItemQuantity();
+
+    this.shippingFormSubscription$ = this.showShippingFormCustomerDetails()
+        .valueChanges.subscribe((data) => this.shippingFormCustomer = data);
+  }
+
+  ngOnDestroy(): void {
+    this.shippingFormSubscription$?.unsubscribe();
+  }
   onAddressSelectionChange() {
     if (this.secondFormGroup.controls['billingAddress'].value === '1' ) {
       this.secondFormGroup.patchValue(this.firstFormGroup.value);
