@@ -46,6 +46,7 @@ export class CheckoutService {
 		return this.secondFormGroup;
 	}
 
+	// the below function sends the form to the backend if we do have one
 	submitCheckOutForm() {
 		const combinedCheckOutFormData = {...this.firstFormData.getRawValue(), ...this.secondFormData.getRawValue(), ...this.cartService.cartItems}
 		// provide api link to submit to the backend

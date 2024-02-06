@@ -10,9 +10,9 @@ import {FormControl} from "@angular/forms";
 
 export class ProductService {
 	private products: IProduct[] = [];
-	private readonly productUrl: string = 'https://api.escuelajs.co/api/v1/products';
+	//private readonly productUrl: string = 'https://api.escuelajs.co/api/v1/products';
 	//private readonly productUrl: string = 'https://dummyjson.com/products';
-	//private readonly productUrl: string = 'https://fakestoreapi.com/products';
+	private readonly productUrl: string = 'https://fakestoreapi.com/products';
 	private searchText: FormControl = new FormControl();
 
 	constructor(private http: HttpClient) {

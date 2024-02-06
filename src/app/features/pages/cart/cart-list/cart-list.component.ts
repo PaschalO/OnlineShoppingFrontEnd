@@ -16,8 +16,7 @@ export class CartListComponent implements OnInit {
 	totalItemsInCart: number = 0;
 	totalPriceInCart: number = 0;
 
-	constructor(private cartService: CartService, private router: Router) {
-	}
+	constructor(private cartService: CartService, private router: Router) {}
 
 	ngOnInit(): void {
 		this.cartList = this.displayShoppingCart();
@@ -39,6 +38,8 @@ export class CartListComponent implements OnInit {
 
 	incrementCartItem(item: ICart) {
 		this.cartService.updateItemQuantityInCart(item);
+		this.totalItemsInCart =  this.displayTotalQuantity();
+		this.totalPriceInCart = this.displayTotalPrice();
 	}
 
 	decrementCartItem(event: { product: ICart, quantity: number }) {
@@ -46,6 +47,8 @@ export class CartListComponent implements OnInit {
 			this.removeItemFromCart(event.product.id)
 		} else {
 			this.cartService.updateItemQuantityInCart(event.product)
+			this.totalItemsInCart =  this.displayTotalQuantity();
+			this.totalPriceInCart = this.displayTotalPrice();
 		}
 	}
 

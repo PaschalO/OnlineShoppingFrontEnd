@@ -67,6 +67,6 @@ export class ReviewListComponent implements OnInit, OnDestroy{
 
   navigateToConfirmationPage() {
     this.router.navigate(['/confirmation-page']);
-    this.cartService.clearCart();
+    //this.cartService.clearCart();
   }
 }

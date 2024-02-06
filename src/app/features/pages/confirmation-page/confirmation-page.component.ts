@@ -13,6 +13,7 @@ export class ConfirmationPageComponent implements OnInit, OnDestroy {
 	buttonName: string = 'Back to the home page';
 	customerData: Record<string, string> | undefined;
 	totalAmount: number = 0;
+	//private TotalPrice: number = 0;
 	tax: number = 0.13;
 	shipping: number = 0;
 
@@ -34,6 +35,7 @@ export class ConfirmationPageComponent implements OnInit, OnDestroy {
 
 	navigateToHomePage() {
 		this.router.navigate(['']);
+		this.cartService.clearCart();
 	}
 
 	showCustomerData() {
