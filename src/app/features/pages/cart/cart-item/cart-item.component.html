@@ -1,13 +1,13 @@
 <mat-card class="card-radius">
-  <mat-card-content *ngIf="product">
+  <mat-card-content *ngIf="item">
     <div class="card-items">
       <div class="grid-items">
-        <img [src]=product.image mat-card-sm-image/>
+        <img [src]=item.image mat-card-sm-image/>
       </div>
       <div class="grid-items">
         <div class="card-description">
           <p>
-            {{product.title}}
+            {{item.name}}
           </p>
           <div class="card-actions-buttons">
             <a mat-button (click)="delete()">{{deleteButton}}</a>
@@ -22,7 +22,7 @@
             </button>
           </div>
           <div class="flex-items">
-            <input #numberInput [ngModel]="product.quantity" min="0" type="number" [readOnly]="product.quantity" #hello/>
+            <input #numberInput [ngModel]="item.quantity" min="0" type="number" [readOnly]="item.quantity" #hello/>
           </div>
           <div class="flex-items">
             <button (click)="incrementItemQuantityInCart()">
@@ -32,11 +32,10 @@
         </div>
       </div>
       <div class="grid-items">
-        <p>{{product.price | currency: 'USD'}} each. </p>
+        <p>{{item.price | currency: 'USD'}} each. </p>
       </div>
       <div class="grid-items">
-        <p>{{ product.price * product.quantity | currency: 'USD' }}</p>
-
+        <p>{{ item.price * item.quantity | currency: 'USD' }}</p>
       </div>
     </div>
   </mat-card-content>

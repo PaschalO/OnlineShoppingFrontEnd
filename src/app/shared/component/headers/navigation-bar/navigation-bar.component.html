@@ -1,10 +1,14 @@
 <mat-toolbar class="nav-toolbar" style="width:100%">
-    <a mat-button routerLink="/" routerLinkActive="active">MyStore</a>
+    <a mat-button routerLink="/products" routerLinkActive="active">MyStore</a>
     <app-search-form></app-search-form>
     <div *ngIf="cartService.cartCount$ | async as cartV" class="navbar-right-links">
-        <!--        <a mat-button (click)="navigateToLoginForm()">Account</a>-->
+        <ng-container *ngIf="userRole$ | async">
+          <button mat-button (click)="navigateToAdmin()">Admin</button>
+          <span *ngIf="users$ | async as user"> {{user.nickname}}</span>
+        </ng-container>
+        <span *ngIf="users$ | async as user"> {{user.given_name}}</span>
         <ng-container
-                *ngIf="auth.isAuthenticated$ | async; then loggedIn; else loggedOut">
+                *ngIf="isAuthenticated$ | async; then loggedIn; else loggedOut">
         </ng-container>
         <ng-template #loggedIn>
             <a (click)="logout()" mat-button>
@@ -12,7 +16,7 @@
             </a>
         </ng-template>
         <ng-template #loggedOut>
-            <a (click)="loginWithRedirect()" mat-button>
+            <a (click)="login()" mat-button>
                 Log in
             </a>
         </ng-template>
@@ -20,10 +24,8 @@
                 matBadgePosition="after" routerLink="/cart">
             <mat-icon>shopping_cart</mat-icon>
         </button>
-        <span *ngIf="users$ | async as user"> {{user.name}}</span>
     </div>
 </mat-toolbar>
-
 
 
 

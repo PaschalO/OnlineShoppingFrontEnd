@@ -1,145 +1,194 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormGroup} from "@angular/forms";
-import {MatStepper} from "@angular/material/stepper";
-import {CartService} from "../../../../shared/services/cart-service";
-import {CheckoutService} from "../../../../shared/services/checkout.service";
-import {Subscription} from "rxjs";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { FormGroup } from "@angular/forms";
+import { MatStepper } from "@angular/material/stepper";
+import { CartService } from "../../../../shared/services/cart-service";
+import { CheckoutService } from "../../../../shared/services/checkout.service";
+import { map, Observable, startWith, Subscription, tap } from "rxjs";
+import { ShippingFormInterface } from "../../../../interface/shipping-form-interface";
+import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
 
 @Component({
-  selector: 'app-checkout',
-  templateUrl: './checkout.component.html',
-  styleUrls: ['./checkout.component.css']
+	selector: "app-checkout",
+	templateUrl: "./checkout.component.html",
+	styleUrls: ["./checkout.component.css"],
+	providers: [
+		{
+			provide: STEPPER_GLOBAL_OPTIONS,
+			useValue: { showError: true }
+		}
+	]
 })
+export class CheckoutComponent implements OnInit, OnDestroy {
+	firstFormGroup!: FormGroup;
+	secondFormGroup!: FormGroup;
+	totalPriceOfCart: number = 0;
+	totalItemsInCart: number = 0;
+	shippingFormCustomer: Partial<ShippingFormInterface> | undefined;
+	checkOutFormSelection!: Observable<boolean>;
+	showShippingSubscription: Subscription | undefined;
 
-export class CheckoutComponent implements OnInit, OnDestroy{
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  totalPriceOfCart: number = 0;
-  totalItemsInCart: number = 0;
-  shippingFormCustomer: Record<string, string> | undefined;
+	constructor(
+		private checkoutService: CheckoutService,
+		private cartService: CartService
+	) {}
 
-  private shippingFormSubscription$: Subscription | undefined;
+	ngOnInit() {
+		this.firstFormGroup = this.checkoutService.firstFormData;
+		this.secondFormGroup = this.checkoutService.secondFormData;
+		this.totalPriceOfCart = this.showTotalPrice();
+		this.totalItemsInCart = this.showTotalItemQuantity();
+		this.checkOutFormSelection = this.showCheckOutFormSelection();
+		this.showShippingSubscription =
+			this.showShippingFormCustomerDetails().subscribe(
+				(data) => (this.shippingFormCustomer = data)
+			);
+	}
 
-  constructor(private checkoutService: CheckoutService, private cartService: CartService) {
-    this.firstFormGroup = this.checkoutService.firstFormData;
-    this.secondFormGroup = this.checkoutService.secondFormData;
-  }
+	ngOnDestroy() {
+		this.showShippingSubscription?.unsubscribe();
+	}
 
-  ngOnInit() {
-    this.totalPriceOfCart = this.showTotalPrice();
-    this.totalItemsInCart = this.showTotalItemQuantity();
+	onAddressSelectionChange(event: any) {
+		const shippingAddress = this.firstFormGroup.value;
+		const billingAddress = this.secondFormGroup;
+		const selectedRadioButton = event.value;
+		if (selectedRadioButton === "1") {
+			billingAddress.patchValue(shippingAddress);
+		} else if (selectedRadioButton === "2") {
+			billingAddress.patchValue({
+				firstName: "",
+				lastName: "",
+				email: "",
+				country: "",
+				address: "",
+				unit: "",
+				city: "",
+				province: "",
+				postalCode: "",
+				phoneNumber: "",
+				billingAddress: "2"
+			});
+		}
+	}
 
-    this.shippingFormSubscription$ = this.showShippingFormCustomerDetails()
-        .valueChanges.subscribe((data) => this.shippingFormCustomer = data);
-  }
+	showTotalPrice(): number {
+		return this.cartService.calculateGrandTotalPrice();
+	}
 
-  ngOnDestroy(): void {
-    this.shippingFormSubscription$?.unsubscribe();
-  }
-  onAddressSelectionChange() {
-    if (this.secondFormGroup.controls['billingAddress'].value === '1' ) {
-      this.secondFormGroup.patchValue(this.firstFormGroup.value);
-    }
+	showTotalItemQuantity() {
+		return this.cartService.calculateTotalQuantity();
+	}
 
-    else {
-      this.secondFormGroup.patchValue({
-        firstName: '',
-        lastName: '',
-        email: '',
-        country: '',
-        address: '',
-        unit: '',
-        city: '',
-        province: '',
-        postalCode: '',
-        phoneNumber: '',
-        billingAddress: '2'
-      })
-    }
-  }
+	showCheckOutFormSelection() {
+		return this.secondFormGroup.controls[
+			"billingAddress"
+		].valueChanges.pipe(
+			startWith(this.firstFormGroup.get("billingAddress")?.value),
+			map((value) => value === "1")
+		);
+	}
+	showShippingFormCustomerDetails(): Observable<
+		Partial<ShippingFormInterface>
+	> {
+		return this.secondFormGroup.valueChanges.pipe(
+			tap((data) => console.log(`Form Data: ${data}`)),
+			startWith(this.secondFormGroup.value),
+			map((data) => data)
+		);
+	}
 
-  showTotalPrice(): number {
-    return this.cartService.calculateGrandTotalPrice();
-  }
+	/**
+	 *
+	 *  Validating input forms
+	 *
+	 * **/
 
-  showTotalItemQuantity() {
-    return this.cartService.calculateTotalQuantity();
-  }
+	required(formGroup: FormGroup, formName: string) {
+		const control = formGroup.get(`${formName}`);
+		if (control) {
+			return control.invalid && control.touched;
+		} else {
+			return null;
+		}
+	}
 
-  showShippingFormCustomerDetails() {
-    return this.checkoutService.firstFormData;
-  }
+	get EmailError(): "required" | "invalid" | null {
+		const email = this.firstFormGroup.controls["email"];
 
-  /**
-   *
-   *  Validating input forms
-   *
-   * **/
+		if (email.hasError("required")) return "required";
+		if (email.hasError("email")) return "invalid";
+		else return null;
+	}
 
-  getEmailError(): "required" | "invalid" | '' {
-    const emailError = this.firstFormGroup.controls['email'];
+	get cardNumberError(): "required" | "invalid" | null {
+		const requiredField = this.required(this.secondFormGroup, "card");
+		const cardNumberField = this.secondFormGroup.get("card");
 
-    if (emailError.hasError('required')) return 'required';
-    if (emailError.hasError('email')) return 'invalid'
-    else return '';
-  }
+		if (cardNumberField?.hasError("required")) return "required";
+		if (cardNumberField?.hasError("cardError")) return "invalid";
+		else return null;
+	}
 
-  getPhoneNumberError(): "required" | "invalid" | '' {
-    const phoneError = this.firstFormGroup.controls['phoneNumber'];
+	get expiryError(): "required" | "invalid" | null {
+		const expiryField = this.secondFormGroup.get("expiry");
 
-    if (phoneError.hasError('required')) return "required";
-    if (phoneError.hasError('pattern')) return "invalid"
+		if (expiryField && expiryField.hasError("required")) return "required";
+		if (expiryField && expiryField.hasError("pattern")) return "invalid";
+		else return null;
+	}
 
-    else return '';
-  }
+	get securityNumberError(): "required" | "invalid" | null {
+		const cardSecurityNumberField =
+			this.secondFormGroup.get("securityCode");
+		if (
+			cardSecurityNumberField &&
+			cardSecurityNumberField.hasError("required")
+		)
+			return "required";
 
-  getSecondPhoneNumberError(): "required" | "invalid" | '' {
-    const secondFormGroupPhoneError = this.secondFormGroup.controls['phoneNumber'];
+		if (
+			cardSecurityNumberField &&
+			cardSecurityNumberField.hasError("pattern")
+		)
+			return "invalid";
 
-    if (secondFormGroupPhoneError.hasError('required')) return 'required';
-    if (secondFormGroupPhoneError.hasError('pattern')) return 'invalid';
+		return null;
+	}
 
-    else return '';
-  }
+	// shippingNextButton(stepper: MatStepper): void {
+	// 	const currentForm = this.firstFormGroup;
+	// 	if (currentForm.valid) {
+	// 		stepper.next();
+	// 	} else {
+	// 		for (const key in currentForm.controls) {
+	// 			currentForm.controls[key].markAsTouched();
+	// 		}
+	// 	}
+	// }
 
-  getPostalCodeError(): "required" | '' {
-    const postalCodeError = this.firstFormGroup.controls['postalCode'];
-    const secondFormPostalCodeError = this.secondFormGroup.controls['postalCode'];
+	// billingNextButton(stepper: MatStepper): void {
+	// 	const currentForm = this.secondFormGroup;
+	// 	if (currentForm.valid) {
+	// 		stepper.next();
+	// 	} else {
+	// 		for (const key in currentForm.controls) {
+	// 			currentForm.controls[key].markAsTouched();
+	// 		}
+	// 	}
+	// }
 
-    if (postalCodeError.hasError('required') || secondFormPostalCodeError.hasError('required')) return 'required';
-    else return '';
-  }
+	nextButton(stepper: MatStepper, formGroup: FormGroup): void {
+		const currentForm =
+			stepper.selectedIndex === 0
+				? this.firstFormGroup
+				: this.secondFormGroup;
 
-  getCardNumberError(): "required" | '' {
-    const cardNumberError =  this.secondFormGroup.controls['card'];
-
-    if (cardNumberError.hasError('required')) return 'required';
-    else return '';
-  }
-
-  getExpiryError(): 'required' | '' {
-    const expiryField = this.secondFormGroup.controls['expiry'];
-
-    if (expiryField.hasError('required')) return 'required';
-    return '';
-  }
-
-  getSecurityNumber(): 'required' | ''  {
-    const cardSecurityNumberField = this.secondFormGroup.controls['securityCode'];
-    if (cardSecurityNumberField.hasError('required')) return 'required';
-    return '';
-  }
-
-  nextButton(stepper: MatStepper): void {
-    const currentForm = stepper.selectedIndex === 1 ? this.firstFormGroup : this.secondFormGroup;
-    if (currentForm.valid) {
-      stepper.next();
-    }
-
-    else {
-      for (const key in currentForm.controls) {
-        currentForm.controls[key].markAsTouched();
-      }
-    }
-  }
+		if (currentForm.valid) {
+			stepper.next();
+		} else {
+			for (const key in currentForm.controls) {
+				currentForm.controls[key].markAsTouched();
+			}
+		}
+	}
 }

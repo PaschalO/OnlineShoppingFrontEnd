@@ -1,36 +1,55 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {CartService} from "../../../services/cart-service";
-import {Router} from "@angular/router";
-import {AuthService} from "@auth0/auth0-angular";
-import {DOCUMENT} from '@angular/common';
-import {Observable} from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { CartService } from "../../../services/cart-service";
+import { map, Observable } from "rxjs";
+import { AuthenticationService } from "../../../services/authentication.service";
+import { User } from "@auth0/auth0-angular";
+import { Router } from "@angular/router";
+import { UserService } from "../../../services/user.service";
 
 @Component({
-	selector: 'app-navigation-bar',
-	templateUrl: './navigation-bar.component.html',
-	styleUrls: ['./navigation-bar.component.css']
+	selector: "app-navigation-bar",
+	templateUrl: "./navigation-bar.component.html",
+	styleUrls: ["./navigation-bar.component.css"]
 })
 export class NavigationBarComponent implements OnInit {
-
 	isButtonEnabled$: Observable<boolean> | undefined;
-	users$ = this.auth.user$;
+	users$: Observable<User | null | undefined> | undefined;
+	isAuthenticated$: Observable<Boolean> | undefined;
+	userRole$: Observable<boolean> | undefined;
 
-	constructor(public cartService: CartService, public auth: AuthService, @Inject(DOCUMENT) private document: Document) {
+	constructor(
+		public cartService: CartService,
+		private userService: UserService,
+		private authenticationService: AuthenticationService,
+		private router: Router
+	) {
+		this.isAuthenticated$ = this.verifyAuthentication();
 	}
-
 	ngOnInit(): void {
 		this.isButtonEnabled$ = this.cartService.disableCartIcon();
+		this.users$ = this.userService.userInfo;
+		this.userRole$ = this.fetchUserRoles();
 	}
 
-	loginWithRedirect() {
-		this.auth.loginWithRedirect();
+	login() {
+		this.authenticationService.login();
 	}
 
 	logout() {
-		this.auth.logout({
-			logoutParams: {
-				returnTo: this.document.location.origin
-			}
-		});
+		this.authenticationService.logout();
+	}
+
+	verifyAuthentication() {
+		return this.authenticationService.verifyIfUserIsAuthenticated();
+	}
+
+	fetchUserRoles() {
+		return this.userService
+			.fetchUserRole$()
+			.pipe(map((role) => role === "Admin"));
+	}
+
+	navigateToAdmin() {
+		this.router.navigate(["admin"]);
 	}
 }

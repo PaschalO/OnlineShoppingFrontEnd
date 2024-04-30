@@ -3,14 +3,14 @@
         <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
             <input matInput type="text" placeholder="first name" formControlName="firstName" required/>
-            <ng-container *ngIf="parent.controls['firstName'].invalid && parent.controls['firstName'].touched">
+            <ng-container *ngIf="required('firstName')">
                 <mat-error>This field is required</mat-error>
             </ng-container>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Last Name</mat-label>
             <input matInput type="text" placeholder="last name" formControlName="lastName" required/>
-            <ng-container *ngIf="parent.controls['lastName'].invalid && parent.controls['lastName'].touched">
+            <ng-container *ngIf="required('lastName')">
                 <mat-error>This field is required</mat-error>
             </ng-container>
         </mat-form-field>
@@ -18,7 +18,7 @@
     <mat-form-field appearance="outline" style="width:100%">
         <mat-label>Address</mat-label>
         <input matInput type="text" placeholder="address" formControlName="address" required/>
-        <ng-container *ngIf="parent.controls['address'].invalid && parent.controls['address'].touched">
+        <ng-container *ngIf="required('address')">
             <mat-error>This field is required</mat-error>
         </ng-container>
     </mat-form-field>
@@ -30,8 +30,8 @@
         <mat-form-field appearance="outline">
             <mat-label>Phone number</mat-label>
             <input matInput type="text" placeholder="telephone" formControlName="phoneNumber" [maxlength]="10" required/>
-            <ng-container *ngIf="parent.controls['phoneNumber'].invalid && parent.controls['phoneNumber'].touched">
-                <div [ngSwitch]="">
+            <ng-container *ngIf="required('phoneNumber')">
+                <div [ngSwitch]="phoneNumberError">
                     <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
                     <mat-error *ngSwitchCase="'invalid'">Invalid format</mat-error>
                 </div>
@@ -42,14 +42,14 @@
         <mat-form-field appearance="outline">
             <mat-label>Country</mat-label>
             <input matInput type="text" placeholder="country" formControlName="country" required/>
-            <ng-container *ngIf="parent.controls['country'].invalid && parent.controls['country'].touched">
+            <ng-container *ngIf="required('country')">
                 <mat-error>This field is required</mat-error>
             </ng-container>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>City</mat-label>
             <input matInput type="text" placeholder="city" formControlName="city" required/>
-            <ng-container *ngIf="parent.controls['city'].invalid && parent.controls['city'].touched">
+            <ng-container *ngIf="required('city')">
                 <mat-error>This field is required</mat-error>
             </ng-container>
         </mat-form-field>
@@ -58,17 +58,17 @@
         <mat-form-field appearance="outline">
             <mat-label>Province</mat-label>
             <input matInput type="text" placeholder="province" formControlName="province" required/>
-            <ng-container *ngIf="parent.controls['province'].invalid && parent.controls['province'].touched">
+            <ng-container *ngIf="required('province')">
                 <mat-error>This field is required</mat-error>
             </ng-container>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Postal Code</mat-label>
             <input matInput maxlength="6" placeholder="postal code" formControlName="postalCode" required/>
-            <ng-container *ngIf="parent.controls['postalCode'].invalid && parent.controls['postalCode'].touched">
-                <div [ngSwitch]="">
+            <ng-container *ngIf="required('postalCode')">
+                <div [ngSwitch]="postalCodeError">
                     <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
-                    <mat-error *ngSwitchCase="'pattern'">Invalid format</mat-error>
+                    <mat-error *ngSwitchCase="'invalid'">Invalid format</mat-error>
                 </div>
             </ng-container>
         </mat-form-field>

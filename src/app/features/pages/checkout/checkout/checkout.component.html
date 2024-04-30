@@ -2,16 +2,16 @@
   <div class="checkout-inner-container">
     <mat-card>
       <mat-card-content>
-        <mat-stepper #stepper>
+        <mat-stepper #stepper linear>
           <!-- stepper 1 -->
-          <mat-step [stepControl]="firstFormGroup" label="Shipping">
+          <mat-step [stepControl]="firstFormGroup" label="Shipping" errorMessage="Error in the shipping form">
             <form [formGroup]="firstFormGroup" class="checkout-form">
               <mat-form-field class="checkout-input" appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput type="email" placeholder="Ex. pat@emailaddress.com" class="test" formControlName="email" required/>
                 <mat-hint align="start">We will send the order confirmation to the email address</mat-hint>
-                <ng-container *ngIf="firstFormGroup.controls['email'].invalid && firstFormGroup.controls['email'].touched">
-                  <div [ngSwitch]="getEmailError()">
+                <ng-container *ngIf="required(firstFormGroup, 'email')">
+                  <div [ngSwitch]="EmailError">
                     <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
                     <mat-error *ngSwitchCase="'invalid'">email address is invalid</mat-error>
                   </div>
@@ -19,16 +19,18 @@
               </mat-form-field>
               <mat-divider></mat-divider>
               <span>Address</span>
+
+              <!--- shipping form --->
               <div class="row row-1">
                 <app-checkout-form [parent]="firstFormGroup"></app-checkout-form>
               </div>
               <div class="checkout-form-button">
-                <button mat-stroked-button matStepperNext (click)="nextButton(stepper)">Continue to payment</button>
+                <button mat-stroked-button matStepperNext (click)="nextButton(stepper, firstFormGroup)">Continue to payment</button>
               </div>
             </form>
           </mat-step>
           <!-- stepper 2 -->
-          <mat-step [stepControl]="secondFormGroup"  label="Payment">
+          <mat-step [stepControl]="secondFormGroup"  label="Payment" errorMessage="Error in the shipping form">
             <div class="payment">
               <span>All transactions are secure and encrypted</span>
               <form [formGroup]="secondFormGroup" class="checkout-form">
@@ -36,77 +38,87 @@
                 <mat-card>
                   <mat-card-header class="checkout-form-title">
                     <mat-card-title>Credit card</mat-card-title>
-                  </mat-card-header>
+                  </mat-card-header>     `
                   <mat-card-content class="payment-items">
                     <mat-divider></mat-divider>
                     <mat-form-field appearance="outline">
                       <mat-label>Card Number</mat-label>
                       <input matInput type="num" placeholder="Card Number" formControlName="card" />
-                      <ng-container *ngIf="secondFormGroup.controls['card'].invalid && secondFormGroup.controls['card'].touched">
-                        <mat-error>This field is required</mat-error>
+                      <ng-container *ngIf="required(secondFormGroup, 'card')">
+                        <ng-container [ngSwitch]="cardNumberError">
+                          <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
+                          <mat-error *ngSwitchCase="'invalid'">Please enter a valid credit card number</mat-error>
+                        </ng-container>
                       </ng-container>
                     </mat-form-field>
                     <div class="row">
                       <mat-form-field appearance="outline">
                         <mat-label>Expiry (MM/YY)</mat-label>
                         <input matInput type="num" placeholder="MM/YY" formControlName="expiry" maxlength="4"/>
-                        <ng-container *ngIf="secondFormGroup.controls['expiry'].invalid && secondFormGroup.controls['expiry'].touched">
-                          <mat-error>This field is required</mat-error>
+                        <ng-container *ngIf="required(secondFormGroup, 'expiry')">
+                          <ng-container [ngSwitch]="expiryError">
+                            <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
+                            <mat-error *ngSwitchCase="'invalid'">Invalid expiry date</mat-error>
+                          </ng-container>
                         </ng-container>
                       </mat-form-field>
                       <mat-form-field appearance="outline">
                         <mat-label>Security code</mat-label>
-                        <input matInput type="num" placeholder="security code" formControlName="securityCode" [maxlength]="3"/>
-                        <ng-container *ngIf="secondFormGroup.controls['securityCode'].invalid && secondFormGroup.controls['securityCode'].touched">
-                          <mat-error>This field is required</mat-error>
+                        <input matInput type="num" placeholder="security code" formControlName="securityCode" maxlength="3"/>
+                        <ng-container *ngIf="required(secondFormGroup, 'securityCode')">
+                          <ng-container [ngSwitch]="securityNumberError">
+                            <mat-error *ngSwitchCase="'required'">This field is required</mat-error>
+                            <mat-error *ngSwitchCase="'invalid'">Invalid security number</mat-error>
+                          </ng-container>
                         </ng-container>
                       </mat-form-field>
                     </div>
                     <mat-divider></mat-divider>
                   </mat-card-content>
-
                   <!-- End of credit card form -->
-
                   <!-- Beginning of billing card form -->
                   <mat-card-header>
                     <mat-card-title>Billing address</mat-card-title>
                     <mat-card-subtitle>Select the address that is associated with your credit card.</mat-card-subtitle>
                   </mat-card-header>
                   <mat-card-content class="billing-form">
-                    <mat-radio-group class="checkout-radio" formControlName="billingAddress" (change)="onAddressSelectionChange()">
+                    <mat-radio-group class="checkout-radio" formControlName="billingAddress" (change)="onAddressSelectionChange($event)">
                       <mat-card>
                         <mat-radio-button value="1">Same as shipping address</mat-radio-button>
-                        <ng-container *ngIf="this.secondFormGroup.controls['billingAddress'].value === '1'">
-                          <mat-card-content class="radio-button-address">
-                            <ng-container *ngIf="shippingFormCustomer">
-                              <span>
-                                {{ shippingFormCustomer['address']}}
-                                {{ shippingFormCustomer['city']}}
-                                {{ shippingFormCustomer['province']}}
-                                {{ shippingFormCustomer['postalCode']}}
-                              </span>
-                              <span>
-                                {{ shippingFormCustomer['phoneNumber'] }}
-                              </span>
-                            </ng-container>
-                          </mat-card-content>
+                        <ng-container *ngIf="(checkOutFormSelection | async) as myform">
+                          <ng-container *ngIf="myform">
+                            <mat-card-content class="radio-button-address">
+                              <ng-container *ngIf="shippingFormCustomer">
+                                <span>
+                                  {{ shippingFormCustomer.address}}
+                                  {{ shippingFormCustomer.city }}
+                                  {{ shippingFormCustomer.province }}
+                                  {{ shippingFormCustomer.postalCode }}
+                                </span>
+                                <span>
+                                  {{ shippingFormCustomer.phoneNumber }}
+                                </span>
+                              </ng-container>
+                            </mat-card-content>
+                          </ng-container>
+
                         </ng-container>
                         <mat-radio-button value="2">Use a different billing address</mat-radio-button>
+                        <ng-container *ngIf="!(checkOutFormSelection | async)">
+                          <!--- billing form --->
+                          <div class="billing-form-items">
+                            <div class="row row-1">
+                              <app-checkout-form [parent]="secondFormGroup"></app-checkout-form>
+                            </div>
+                          </div>
+                        </ng-container>
                       </mat-card>
                       <mat-divider></mat-divider>
                     </mat-radio-group>
-                    <ng-container *ngIf="this.secondFormGroup.controls['billingAddress'].value === '2'">
-                      <div class="billing-form-items">
-                        <div class="row row-1">
-                          <app-checkout-form [parent]="secondFormGroup"></app-checkout-form>
-                        </div>
-                      </div>
-                    </ng-container>
-
                     <div class="checkout-form-button">
                       <div class="row">
                         <button mat-stroked-button matStepperPrevious>Back to shipping</button>
-                        <button mat-stroked-button matStepperNext (click)="nextButton(stepper)">Continue to review</button>
+                        <button mat-stroked-button matStepperNext (click)="nextButton(stepper, secondFormGroup)">Continue to review</button>
                       </div>
                     </div>
                   </mat-card-content>
@@ -121,10 +133,9 @@
               <mat-card-title>Ready to place your order?</mat-card-title>
               <mat-card-title>Let's make sure everything's right.</mat-card-title>
             </mat-card-header>
-            <app-review-list>
+            <app-review-list [stepper]="stepper">
               <button mat-stroked-button matStepperPrevious>Back to Payment</button>
             </app-review-list>
-
           </mat-step>
         </mat-stepper>
       </mat-card-content>
@@ -141,7 +152,6 @@
           <span>{{ totalPriceOfCart | currency: "USD" }}</span>
         </div>
         <div class="row">
-<!--          <span>Estimated Tax {{ 0.13 | percent }}: </span>-->
           <span>Estimated Tax:  </span>
           <span>{{ totalPriceOfCart * 0.13 | currency: "USD" }}</span>
         </div>
@@ -156,4 +166,4 @@
   </div>
 </div>
 
-
+<pre>{{cardNumberError | json}}</pre>

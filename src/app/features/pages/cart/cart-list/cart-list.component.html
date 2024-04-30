@@ -9,7 +9,7 @@
       <mat-divider></mat-divider>
       <app-cart-item
         *ngFor="let cartProducts of cartList"
-        [product]="cartProducts"
+        [item]="cartProducts"
         (deleteItem)="removeItemFromCart($event)"
         (incrementItem)="incrementCartItem($event)"
         (decrementItem)="decrementCartItem($event)"

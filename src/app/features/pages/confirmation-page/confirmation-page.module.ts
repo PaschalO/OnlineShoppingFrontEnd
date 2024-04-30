@@ -1,17 +1,15 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {AngularMaterialModule} from "../../../angularMaterial/angularMaterial.module";
-import {RouterModule, Routes} from "@angular/router";
-import {ConfirmationPageComponent} from "./confirmation-page.component";
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { AngularMaterialModule } from "../../../angularMaterial/angularMaterial.module";
+import { RouterModule, Routes } from "@angular/router";
+import { ConfirmationPageComponent } from "./confirmation-page.component";
 
 export const routes: Routes = [
-	{path: 'confirmation-page', component: ConfirmationPageComponent}
-]
+	{ path: "confirmation-page", component: ConfirmationPageComponent }
+];
 
 @NgModule({
-	declarations: [
-		ConfirmationPageComponent
-	],
+	declarations: [ConfirmationPageComponent],
 
 	imports: [
 		CommonModule,
@@ -19,6 +17,4 @@ export const routes: Routes = [
 		RouterModule.forChild(routes)
 	]
 })
-
-export class ConfirmationPageModule {
-}
+export class ConfirmationPageModule {}

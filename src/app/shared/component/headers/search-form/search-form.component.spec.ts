@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SearchFormComponent } from './search-form.component';
+import { SearchFormComponent } from "./search-form.component";
 
-describe('SearchFormComponent', () => {
-  let component: SearchFormComponent;
-  let fixture: ComponentFixture<SearchFormComponent>;
+describe("SearchFormComponent", () => {
+	let component: SearchFormComponent;
+	let fixture: ComponentFixture<SearchFormComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [SearchFormComponent]
-    });
-    fixture = TestBed.createComponent(SearchFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		TestBed.configureTestingModule({
+			declarations: [SearchFormComponent]
+		});
+		fixture = TestBed.createComponent(SearchFormComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it("should create", () => {
+		expect(component).toBeTruthy();
+	});
 });

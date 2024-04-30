@@ -1,52 +1,52 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { AppComponent } from "./app.component";
 import { ProductsModule } from "./features/pages/products/products.module";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthenticationModule} from "./authentication/authentication.module";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterOutlet } from "@angular/router";
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from "./app-routing.module";
 import { CartModule } from "./features/pages/cart/cart.module";
 import { SharedModule } from "./shared/shared.module";
 import { HeadersModule } from "./shared/component/headers/headers.module";
 import { CheckoutModule } from "./features/pages/checkout/checkout.module";
-import  { ConfirmationPageModule } from "./features/pages/confirmation-page/confirmation-page.module";
+import { ConfirmationPageModule } from "./features/pages/confirmation-page/confirmation-page.module";
 import { AuthModule } from "@auth0/auth0-angular";
-import {AngularMaterialModule} from "./angularMaterial/angularMaterial.module";
+import { AngularMaterialModule } from "./angularMaterial/angularMaterial.module";
+import { AdminModule } from "./admin/admin.module";
+import environment from "./environments/environment";
 
 @NgModule({
-    declarations: [
-        AppComponent,
-    ],
+	declarations: [AppComponent],
 	imports: [
 		BrowserModule,
+		AdminModule,
 		ProductsModule,
 		CartModule,
 		FormsModule,
 		HttpClientModule,
 		BrowserAnimationsModule,
 		SharedModule,
-		AuthenticationModule,
 		RouterOutlet,
 		AppRoutingModule,
 		HeadersModule,
 		ConfirmationPageModule,
 		CheckoutModule,
 		AuthModule.forRoot({
-			domain: 'dev-bgg57gfmuzsxtfzv.us.auth0.com',
-			clientId: 'yGWRMFzb1urZSYiGUjhZNXDO2OHoz7L0',
+			domain: environment.auth.domain,
+			clientId: environment.auth.clientId,
 			authorizationParams: {
-				redirect_uri: window.location.origin
-			}
+				redirect_uri: environment.auth.redirect_uri,
+				audience: environment.auth.audience
+			},
+			cacheLocation: "localstorage",
+			useRefreshTokens: true
 		}),
 		AngularMaterialModule
 	],
-    providers: [],
-    exports: [
-    ],
-    bootstrap: [AppComponent] // list on the components that should be known too angular to check and render
+	providers: [],
+	exports: [],
+	bootstrap: [AppComponent] // list on the components that should be known too angular to check and render
 })
-
-export class AppModule { }
+export class AppModule {}

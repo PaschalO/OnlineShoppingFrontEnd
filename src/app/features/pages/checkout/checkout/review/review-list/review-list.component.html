@@ -11,26 +11,26 @@
         </div>
         <div class="item2">
           <p>Delivers to</p>
-          <ng-container *ngIf="shippingFormCustomer">
+          <ng-container *ngIf="shippingFormCustomer | async as shippingForm">
             <p>
-              {{ shippingFormCustomer["firstName"] }}
-              {{ shippingFormCustomer["lastName"] }}
+              {{ shippingForm["firstName"] }}
+              {{ shippingForm["lastName"] }}
             </p>
             <p>
-              {{ shippingFormCustomer["unit"] }}
-              {{ shippingFormCustomer["address"] }}
+              {{ shippingForm["unit"] }}
+              {{ shippingForm["address"] }}
             </p>
             <p>
-              {{ shippingFormCustomer["city"] }}
-              {{ shippingFormCustomer["province"] }}
-              {{ shippingFormCustomer["postalCode"] }}
+              {{ shippingForm["city"] }}
+              {{ shippingForm["province"] }}
+              {{ shippingForm["postalCode"] }}
             </p>
           </ng-container>
         </div>
         <div class="item3">
           <p>Contact information</p>
-          <div *ngIf="billingFormCustomer">
-            {{ billingFormCustomer['phoneNumber'] }}
+          <div *ngIf="billingFormCustomer | async as billingForm">
+            {{ billingForm['phoneNumber'] }}
           </div>
         </div>
 
@@ -43,14 +43,14 @@
         </div>
         <div class="item6">
           <p>Billing Address</p>
-          <ng-container *ngIf="billingFormCustomer">
+          <ng-container *ngIf="billingFormCustomer | async as billingForm">
             <p>
-              {{ billingFormCustomer['firstName'] }}
-              {{ billingFormCustomer['lastName'] }}
+              {{ billingForm['firstName'] }}
+              {{ billingForm['lastName'] }}
             </p>
             <p>
-              {{ billingFormCustomer['unit'] }}
-              {{ billingFormCustomer['address'] }}
+              {{ billingForm['unit'] }}
+              {{ billingForm['address'] }}
             </p>
           </ng-container>
         </div>

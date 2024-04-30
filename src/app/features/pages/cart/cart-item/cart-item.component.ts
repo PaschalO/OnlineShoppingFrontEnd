@@ -1,41 +1,45 @@
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {ICart} from "../../products/product-spec";
+import {
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	Output,
+	ViewChild
+} from "@angular/core";
+
+// interface
+import { ICart } from "../../../../interface/cart-interface";
 
 @Component({
-	selector: 'app-cart-item',
-	templateUrl: './cart-item.component.html',
-	styleUrls: ['./cart-item.component.css']
+	selector: "app-cart-item",
+	templateUrl: "./cart-item.component.html",
+	styleUrls: ["./cart-item.component.css"]
 })
-
 export class CartItemComponent {
-	@Input() product!: ICart;
-	@Output() deleteItem: EventEmitter<number> = new EventEmitter<number>();
+	@Input() item!: ICart;
+	@Output() deleteItem: EventEmitter<ICart> = new EventEmitter<ICart>();
 	@Output() incrementItem: EventEmitter<ICart> = new EventEmitter<ICart>();
-	@Output() decrementItem: EventEmitter<{ product: ICart, quantity: number }> = new EventEmitter<{
-		product: ICart,
-		quantity: number
-	}>();
+	@Output() decrementItem: EventEmitter<ICart> = new EventEmitter<ICart>();
 
-	@ViewChild('numberInput', {static: false}) numberInput!: ElementRef;
+	@ViewChild("numberInput", { static: false }) numberInput!: ElementRef;
 
-	deleteButton: string = 'delete';
+	deleteButton: string = "delete";
 
-	constructor() {
-	}
+	constructor() {}
 
 	incrementItemQuantityInCart(): void {
 		this.numberInput.nativeElement.stepUp(1);
-		this.product.quantity = parseInt(this.numberInput.nativeElement.value);
-		this.incrementItem.emit(this.product);
+		this.item.quantity = parseInt(this.numberInput.nativeElement.value);
+		this.incrementItem.emit(this.item);
 	}
 
 	decrementItemQuantityInCart(): void {
 		this.numberInput.nativeElement.stepDown(1);
-		this.product.quantity = parseInt(this.numberInput.nativeElement.value);
-		this.decrementItem.emit({product: this.product, quantity: this.product.quantity});
+		this.item.quantity = parseInt(this.numberInput.nativeElement.value);
+		this.decrementItem.emit(this.item);
 	}
 
 	delete(): void {
-		this.deleteItem.emit(this.product?.id);
+		this.deleteItem.emit(this.item);
 	}
 }
