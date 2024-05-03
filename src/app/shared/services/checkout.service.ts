@@ -60,10 +60,20 @@ export class CheckoutService {
 		});
 	}
 
+	/**
+	 * Retrieves the first form data.
+	 *
+	 * @returns {FormGroup} The first form group data.
+	 */
 	get firstFormData(): FormGroup {
 		return this.firstFormGroup;
 	}
 
+	/**
+	 * Retrieves the second form data as a FormGroup object.
+	 *
+	 * @returns {FormGroup} The second form data as a FormGroup object.
+	 */
 	get secondFormData(): FormGroup {
 		return this.secondFormGroup;
 	}
@@ -72,6 +82,12 @@ export class CheckoutService {
 	 * From stackOverFlow with some slight modifications
 	 *
 	 * */
+	/**
+	 * Validates a credit card number using the Luhn algorithm.
+	 *
+	 * @param {AbstractControl} control - The form control to validate.
+	 * @returns {ValidationErrors | null} An object with a "cardError" property if the card number is invalid, otherwise null.
+	 */
 	private creditCardLuhnValidator(): ValidatorFn {
 		return (control: AbstractControl): ValidationErrors | null => {
 			const regex = new RegExp("^[0-9]{16}$");

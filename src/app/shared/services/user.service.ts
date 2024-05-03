@@ -15,13 +15,20 @@ export class UserService {
 		this.auth0CustomClaimNameSpace = `https://customstorefront.com/roles`;
 	}
 
+	/**
+	 * Retrieves the user information.
+	 *
+	 * @return {Observable<User>} An Observable that emits the user information.
+	 */
 	get userInfo() {
 		return (this.users$ = this.auth.user$);
 	}
 
-	/*
-	 *  Extract user id from Auth0 Custom claim
-	 * */
+	/**
+	 * Fetches the user ID from the users$ observable.
+	 *
+	 * @returns {Observable<string>} An observable that emits the user ID.
+	 */
 	fetchUserId$() {
 		return this.users$.pipe(
 			map((user) => {
@@ -30,10 +37,11 @@ export class UserService {
 		);
 	}
 
-	/*
-	 * Extract user role from the Auth0 custom claim
+	/**
+	 * Retrieves the role of the user from the `users$` Observable.
 	 *
-	 * */
+	 * @return {Observable<string>} An Observable that emits the role of the user.
+	 */
 	fetchUserRole$() {
 		return this.users$.pipe(
 			map((user) => {

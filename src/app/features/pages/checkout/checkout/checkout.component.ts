@@ -48,6 +48,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		this.showShippingSubscription?.unsubscribe();
 	}
 
+	/**
+	 * Handles the change event when selecting an address.
+	 *
+	 * @param {any} event - The event object representing the change event.
+	 * @return {void}
+	 */
 	onAddressSelectionChange(event: any) {
 		const shippingAddress = this.firstFormGroup.value;
 		const billingAddress = this.secondFormGroup;
@@ -71,14 +77,30 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Retrieves the total price of all items in the cart.
+	 *
+	 * @returns {number} The total price of all items in the cart.
+	 */
 	showTotalPrice(): number {
 		return this.cartService.calculateGrandTotalPrice();
 	}
 
+	/**
+	 * Get the total quantity of items in the cart.
+	 *
+	 * @return {number} The total quantity of items in the cart.
+	 */
 	showTotalItemQuantity() {
 		return this.cartService.calculateTotalQuantity();
 	}
 
+	/**
+	 * Retrieves the value changes of the "billingAddress" form control in the secondFormGroup
+	 * and maps it to a boolean value indicating if the selected value is equal to "1"
+	 *
+	 * @return {Observable<boolean>} An observable that emits the boolean value indicating if the selected value is equal to "1"
+	 */
 	showCheckOutFormSelection() {
 		return this.secondFormGroup.controls[
 			"billingAddress"
@@ -87,6 +109,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 			map((value) => value === "1")
 		);
 	}
+
+	/**
+	 * Returns an Observable that emits a partial ShippingFormInterface object representing the customer details entered in the shipping form.
+	 *
+	 * @return {Observable<Partial<ShippingFormInterface>>} An Observable that emits a partial ShippingFormInterface object.
+	 *
+	 * @example
+	 * showShippingFormCustomerDetails().subscribe((customerDetails) => {
+	 *     // Process the customer details
+	 * });
+	 */
 	showShippingFormCustomerDetails(): Observable<
 		Partial<ShippingFormInterface>
 	> {
@@ -98,10 +131,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * Function to validate input forms.
 	 *
-	 *  Validating input forms
+	 * @param {FormGroup} formGroup - The form group containing the input form.
+	 * @param {string} formName - The name of the input form to validate.
 	 *
-	 * **/
+	 * @returns {boolean | null} Returns true if the input form is invalid and has been touched, or null if the form control does not exist.
+	 */
 
 	required(formGroup: FormGroup, formName: string) {
 		const control = formGroup.get(`${formName}`);
@@ -112,6 +148,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Returns the error type for the email input field.
+	 *
+	 * @returns {"required" | "invalid" | null} The error type for the email input field.
+	 */
 	get EmailError(): "required" | "invalid" | null {
 		const email = this.firstFormGroup.controls["email"];
 
@@ -120,6 +161,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		else return null;
 	}
 
+	/**
+	 * Retrieves the error status of the card number field.
+	 *
+	 * @returns {string | null} - The error status of the card number field. Possible values are "required", "invalid", or null.
+	 */
 	get cardNumberError(): "required" | "invalid" | null {
 		const requiredField = this.required(this.secondFormGroup, "card");
 		const cardNumberField = this.secondFormGroup.get("card");
@@ -129,6 +175,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		else return null;
 	}
 
+	/**
+	 * Gets the expiry error of the form field.
+	 *
+	 * @return {string | null} The expiry error. Possible values are "required", "invalid", or null.
+	 */
 	get expiryError(): "required" | "invalid" | null {
 		const expiryField = this.secondFormGroup.get("expiry");
 
@@ -137,6 +188,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		else return null;
 	}
 
+	/**
+	 * Returns the error message related to the security number field.
+	 * The possible error messages are "required", "invalid", or null if there are no errors.
+	 *
+	 * @returns {string | null} - The error message for the security number field.
+	 */
 	get securityNumberError(): "required" | "invalid" | null {
 		const cardSecurityNumberField =
 			this.secondFormGroup.get("securityCode");
@@ -177,6 +234,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 	// 	}
 	// }
 
+	/**
+	 * Advances to the next step in the mat stepper if the current form is valid.
+	 * If the current form is invalid, marks all form controls as touched.
+	 *
+	 * @param {MatStepper} stepper - The mat stepper component.
+	 * @param {FormGroup} formGroup - The form group to be validated.
+	 *
+	 * @return {void} - This method does not return a value.
+	 */
 	nextButton(stepper: MatStepper, formGroup: FormGroup): void {
 		const currentForm =
 			stepper.selectedIndex === 0

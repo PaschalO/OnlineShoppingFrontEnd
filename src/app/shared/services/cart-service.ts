@@ -23,17 +23,31 @@ export class CartService {
 
 	constructor(private localStorage: LocalStorageService) {}
 
+	/**
+	 * Retrieves the item count from local storage.
+	 *
+	 * @returns {number} The item count. Returns 0 if no item count is found in local storage.
+	 */
 	get itemCount(): number {
 		const itemCount = this.localStorage.getItem("item");
 		return itemCount ? parseInt(itemCount, 10) : 0;
 	}
 
+	/**
+	 * Sets the count of items in the shopping cart.
+	 *
+	 * @param {number} amount - The number of items to set.
+	 */
 	set itemCount(amount: number) {
 		this.localStorage.addItem("item", amount.toString());
 		this.cartItem.next({ item: amount });
 	}
 
-	// get cart array from localStorage
+	/**
+	 * Retrieves the cart items from the localStorage.
+	 *
+	 * @returns {ICart[]} An array of cart items.
+	 */
 	get cartItems(): ICart[] {
 		try {
 			return JSON.parse(this.localStorage.getItem("cart") || "[]");
@@ -44,6 +58,11 @@ export class CartService {
 	}
 
 	// set cart array in localStorage
+	/**
+	 * Sets the items in the shopping cart.
+	 *
+	 * @param {ICart[]} item - An array of cart items to be added to the shopping cart.
+	 */
 	set cartItems(item: ICart[]) {
 		try {
 			this.localStorage.addItem("cart", JSON.stringify(item));
@@ -53,16 +72,34 @@ export class CartService {
 	}
 
 	// clear cart from storage and reset the total quantity to 0
+	/**
+	 * Clears the cart by removing all items from the local storage and updating the cart item count.
+	 *
+	 * @memberof ClassName
+	 * @function clearCart
+	 * @returns {void}
+	 *
+	 * @example
+	 * clearCart();
+	 */
 	clearCart() {
 		try {
-			this.localStorage.deleteItem("cart");
-			this.localStorage.deleteItem("item");
+			this.localStorage.clear();
+			//this.localStorage.deleteItem("cart");
+			//this.localStorage.deleteItem("item");
 			this.cartItem.next({ item: 0 });
 		} catch (e) {
 			console.log(e);
 		}
 	}
 
+	/**
+	 * Adds a product to the cart with the specified quantity.
+	 *
+	 * @param {IProduct} product - The product to add to the cart.
+	 * @param {number} [quantity=1] - The quantity of the product to add. Default is 1.
+	 * @return {void}
+	 */
 	addToCart(product: IProduct, quantity: number = 1): void {
 		this.cart = this.cartItems || [];
 
@@ -96,6 +133,11 @@ export class CartService {
 		this.itemCount = this.calculateTotalQuantity();
 	}
 
+	/**
+	 * Updates the quantity of an item in the shopping cart.
+	 *
+	 * @param {ICart} shoppingCartItem - The shopping cart item to update.
+	 */
 	updateItemQuantityInCart(shoppingCartItem: ICart) {
 		this.cart = this.cartItems;
 
@@ -123,6 +165,13 @@ export class CartService {
 		this.cartItems = this.cart;
 		this.itemCount = this.calculateTotalQuantity();
 	}
+
+	/**
+	 * Remove a product from the cart.
+	 *
+	 * @param {ICart} cart - The cart object to remove the product from.
+	 * @return {Array} The updated cart items after removing the product.
+	 */
 	removeProductFromCart(cart: ICart) {
 		this.cart = this.cartItems;
 
@@ -139,7 +188,11 @@ export class CartService {
 		return this.cartItems;
 	}
 
-	// calculates the total quantity in a cart
+	/**
+	 * Calculates the total quantity of items in the cart.
+	 *
+	 * @returns {number} The total quantity of items in the cart.
+	 */
 	calculateTotalQuantity(): number {
 		this.cart = this.cartItems;
 		return this.cart.reduce(
@@ -149,7 +202,11 @@ export class CartService {
 		);
 	}
 
-	// calculates the total price in the cart
+	/**
+	 * Calculates the grand total price of all items in the cart.
+	 *
+	 * @return {number} The grand total price of all items in the cart.
+	 */
 	calculateGrandTotalPrice(): number {
 		this.cart = this.cartItems;
 		return this.cart.reduce((previousValue: number, currentValue) => {
@@ -157,6 +214,11 @@ export class CartService {
 		}, 0);
 	}
 
+	/**
+	 * Retrieves and displays the items in the cart.
+	 *
+	 * @returns {ICart[] | null} - An array of items in the cart or null if the cart is empty.
+	 */
 	displayItemsInCart(): ICart[] | null {
 		this.cart = this.cartItems;
 
@@ -167,6 +229,11 @@ export class CartService {
 		}
 	}
 
+	/**
+	 * Disables the cart icon based on the number of items in the cart.
+	 *
+	 * @returns An Observable that emits a boolean value indicating whether the cart icon should be disabled or not.
+	 */
 	disableCartIcon(): Observable<boolean> {
 		return this.cartCount$.pipe(map((value) => value.item > 0));
 	}

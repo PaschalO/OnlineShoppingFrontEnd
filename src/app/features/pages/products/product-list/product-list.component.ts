@@ -9,6 +9,14 @@ import { CartService } from "../../../../shared/services/cart-service";
 	templateUrl: "./product-list.component.html",
 	styleUrls: ["./product-list.component.css"]
 })
+
+/**
+ * Product list component logic. Facilitates the display of all products and
+ * handles interactions with the product list.
+ *
+ * @class ProductListComponent
+ * @implements {OnInit}
+ */
 export class ProductListComponent implements OnInit {
 	productList$: Observable<IProduct[]> | undefined;
 	product: string = "";
@@ -26,6 +34,13 @@ export class ProductListComponent implements OnInit {
 		return <number>product.id;
 	}
 
+	/**
+	 * Adds a product to the cart.
+	 *
+	 * @param {IProduct} product - The product to be added to the cart.
+	 *
+	 * @return {void} - This method doesn't return anything.
+	 */
 	addProductToCart(product: IProduct) {
 		if (product) {
 			this.cartService.addToCart(product);

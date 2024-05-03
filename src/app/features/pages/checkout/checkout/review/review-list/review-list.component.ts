@@ -42,8 +42,22 @@ export class ReviewListComponent implements OnInit, OnDestroy {
 	private readonly api;
 	userRole: string;
 	@Input() stepper: MatStepper | undefined;
-
 	private destroy$ = new Subject<void>();
+
+	/**
+	 * Constructs an instance of ReviewListComponent
+	 * It sets initial values for variables, initializes services, etc.
+	 *
+	 * @constructor
+	 * @param {CartService} cartService
+	 * @param {CheckoutService} checkoutService
+	 * @param {Router} router
+	 * @param {HttpClient} http
+	 * @param {AuthenticationService} authenticationService
+	 * @param {ErrorService} handleErrorService
+	 * @param {UserService} userService
+	 */
+
 	constructor(
 		private cartService: CartService,
 		public checkoutService: CheckoutService,
@@ -68,19 +82,40 @@ export class ReviewListComponent implements OnInit, OnDestroy {
 		this.totalPrice = this.showTotalPrice();
 	}
 
+	/**
+	 * Cleanup logic when the component is destroyed.
+	 *
+	 * @lifecycle OnDestroy
+	 * @returns {void}
+	 */
 	ngOnDestroy() {
 		this.destroy$.next();
 		this.destroy$.complete();
 	}
 
+	/**
+	 * Returns the current cart items in the cart service
+	 *
+	 * @returns {ICart[] | null} - Array of cart items, or null if no items
+	 */
 	viewCartItems(): ICart[] | null {
 		return this.cartService.displayItemsInCart();
 	}
 
+	/**
+	 * Returns the total cart price
+	 *
+	 * @returns {number} - Total price of the cart
+	 */
 	showTotalPrice(): number {
 		return this.cartService.calculateGrandTotalPrice();
 	}
 
+	/**
+	 * Observes changes in shipping form details.
+	 *
+	 * @returns {Observable<Partial<ShippingFormInterface>>} - Observable emitting values of shipping form details
+	 */
 	showShippingCustomerDetails(): Observable<Partial<ShippingFormInterface>> {
 		return this.checkoutService.firstFormData.valueChanges.pipe(
 			debounceTime(300),
@@ -89,6 +124,11 @@ export class ReviewListComponent implements OnInit, OnDestroy {
 		);
 	}
 
+	/**
+	 * Observes changes in billing form details.
+	 *
+	 * @returns {Observable<Partial<BillingFormInterface>>} - Observable emitting values of billing form details
+	 */
 	showBillingCustomerDetails(): Observable<Partial<BillingFormInterface>> {
 		return this.checkoutService.secondFormData.valueChanges.pipe(
 			debounceTime(300),
@@ -97,14 +137,31 @@ export class ReviewListComponent implements OnInit, OnDestroy {
 		);
 	}
 
+	/**
+	 * Retrieves the user id from the user service.
+	 *
+	 * @returns {Observable<userId>} - Observable returning user's id
+	 */
 	fetchUserId() {
 		return this.userService.fetchUserId$();
 	}
 
+	/**
+	 * Retrieves the role of the user from user service.
+	 *
+	 * @method loadUserRole
+	 * @returns {Observable<role>} - Returns an observable that emits the user's role
+	 */
 	loadUserRole() {
 		return this.userService.fetchUserRole$();
 	}
 
+	/**
+	 * Performs validations before submitting the form.
+	 * Collects form details, validates user id, role, and makes an API call for performing the transaction.
+	 *
+	 * @returns {void}
+	 */
 	onSubmitForm() {
 		const userInfo = this.checkoutService.secondFormData.getRawValue();
 		const orderedItems = this.viewCartItems();
@@ -150,6 +207,7 @@ export class ReviewListComponent implements OnInit, OnDestroy {
 				error: (error) => console.error("Error in onSubmitForm:", error)
 			});
 	}
+
 	navigateToConfirmationPage() {
 		this.stepper?.reset();
 		this.router.navigate(["/confirmation-page"]);

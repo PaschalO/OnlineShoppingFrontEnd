@@ -13,6 +13,13 @@ import { ICart } from "../../../../interface/cart-interface";
 	templateUrl: "./cart-list.component.html",
 	styleUrls: ["./cart-list.component.css"]
 })
+
+/**
+ * Cart component logic for managing the items in the shopping cart.
+ *
+ * @class CartListComponent
+ * @implements {OnInit}
+ */
 export class CartListComponent implements OnInit {
 	title: string = "Shopping Cart";
 	cartList: ICart[] | null = [];
@@ -20,6 +27,14 @@ export class CartListComponent implements OnInit {
 	totalItemsInCart: number = 0;
 	totalPriceInCart: number = 0;
 
+	/**
+	 * Constructs an instance of CartListComponent
+	 *
+	 * @constructor
+	 * @param {CartService} cartService
+	 * @param {Router} router
+	 * @param {ProductService} productService
+	 */
 	constructor(
 		private cartService: CartService,
 		private router: Router,
@@ -32,18 +47,40 @@ export class CartListComponent implements OnInit {
 		this.totalPriceInCart = this.displayTotalPrice();
 	}
 
+	/**
+	 * Displays all items in the shopping cart.
+	 *
+	 * @returns {ICart[]} - Array of items in the cart
+	 */
 	displayShoppingCart() {
 		return this.cartService.displayItemsInCart();
 	}
 
+	/**
+	 * Calculates and displays the total price of all items in the cart.
+	 *
+	 * @returns {number} - Total price of all items in the cart
+	 */
 	displayTotalPrice(): number {
 		return this.cartService.calculateGrandTotalPrice();
 	}
 
+	/**
+	 * Calculates and displays the total quantity of all items in the cart
+	 *
+	 * @returns {number} - Total quantity of all items in the cart
+	 */
 	displayTotalQuantity(): number {
 		return this.cartService.calculateTotalQuantity();
 	}
 
+	/**
+	 * Increments the quantity of a specific item in the cart.
+	 * Updates total quantity and total price, and shows a snack bar notification.
+	 *
+	 * @param {ICart} item - The item for which the quantity needs to be incremented
+	 * @returns {void}
+	 */
 	incrementCartItem(item: ICart) {
 		this.cartService.updateItemQuantityInCart(item);
 		this.totalItemsInCart = this.displayTotalQuantity();
@@ -53,6 +90,13 @@ export class CartListComponent implements OnInit {
 		this.productService.showSnackBar(item.name, message);
 	}
 
+	/**
+	 * Decrements the quantity of a specific item in the cart. If the quantity reaches zero, the item is removed.
+	 * Updates total quantity and total price, and shows a snack bar notification.
+	 *
+	 * @param {ICart} item - The item for which the quantity needs to be decremented
+	 * @returns {void}
+	 */
 	decrementCartItem(item: ICart) {
 		if (item.quantity === 0) {
 			this.removeItemFromCart(item);
@@ -69,6 +113,13 @@ export class CartListComponent implements OnInit {
 		}
 	}
 
+	/**
+	 * Removes a specific item from the shopping cart.
+	 * Updates total quantity and total price, and shows a snack bar notification.
+	 *
+	 * @param {ICart} item - The item to be removed from the cart
+	 * @returns {void}
+	 */
 	removeItemFromCart(item: ICart) {
 		this.cartList = this.cartService.removeProductFromCart(item);
 		this.totalItemsInCart = this.displayTotalQuantity();
@@ -77,6 +128,11 @@ export class CartListComponent implements OnInit {
 		this.productService.showSnackBar(item.name, message);
 	}
 
+	/**
+	 * Navigates to the checkout page.
+	 *
+	 * @returns {void}
+	 */
 	showCheckOutPage(): void {
 		this.router.navigate(["/checkout"]);
 	}

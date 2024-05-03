@@ -1,3 +1,10 @@
+/*
+ *  The productData variable holds information about all products. This gets
+ *  pushed into the backend database
+ *
+ *
+ * **/
+
 import { IProduct } from "../interface/product-interface";
 
 export const productsData: IProduct[] = [

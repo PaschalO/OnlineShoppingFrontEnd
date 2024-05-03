@@ -49,7 +49,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	verifySubscription!: Subscription;
 	isAdmin$: Observable<boolean> | undefined;
 
-	/* variable for showing the table */
+  // Variable for controlling the table display
 	displayedColumns: string[] = [
 		"created_at",
 		"name",
@@ -86,6 +86,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}
 	}
 
+  // Method to check if the logged-in user has a role of Admin
 	fetchUserRole = () => {
 		return this.userService
 			.fetchUserRole$()

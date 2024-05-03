@@ -1,3 +1,7 @@
+/*
+ * Holds all the environmental variables
+ * */
+
 import authConfig from "../../../auth_config.json";
 
 const environment = {

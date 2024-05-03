@@ -10,11 +10,27 @@ import { CartService } from "../../../../shared/services/cart-service";
 	templateUrl: "./product-detail.component.html",
 	styleUrls: ["./product-detail.component.css"]
 })
+
+/**
+ * Product detail component logic. Includes fetching the specific product, handling
+ * item quantity and adding the product to cart.
+ *
+ * @class ProductDetailComponent
+ * @implements {OnInit}
+ */
 export class ProductDetailComponent implements OnInit {
 	product$: Observable<IProduct | null> | undefined;
 	value: number = 1;
 	@ViewChild("numberInput", { static: false }) numberInput!: ElementRef;
 
+	/**
+	 * Constructs an instance of ProductDetailComponent
+	 *
+	 * @constructor
+	 * @param {ActivatedRoute} route
+	 * @param {ProductService} productService
+	 * @param {CartService} CartService
+	 */
 	constructor(
 		private route: ActivatedRoute,
 		private productService: ProductService,
@@ -25,6 +41,12 @@ export class ProductDetailComponent implements OnInit {
 		this.getProduct();
 	}
 
+	/**
+	 * Fetches the product whose ID is provided in the URL parameters.
+	 * The product is assigned to the local 'product$' Observable.
+	 *
+	 * @returns {void}
+	 */
 	getProduct(): void {
 		const productId: number = Number(
 			this.route.snapshot.paramMap.get("id")
@@ -32,14 +54,33 @@ export class ProductDetailComponent implements OnInit {
 		this.product$ = this.productService.getProduct(productId);
 	}
 
+	/**
+	 * Increases the quantity of the product to be added to the cart.
+	 *
+	 * @returns {void}
+	 */
 	increment(): void {
 		this.numberInput.nativeElement.stepUp(1);
 	}
 
+	/**
+	 * Decreases the quantity of the product to be added to the cart.
+	 * The lower limit is one.
+	 *
+	 * @returns {void}
+	 */
 	decrement(): void {
 		this.numberInput.nativeElement.stepDown(1);
 	}
 
+	/**
+	 * Adds the selected product and the defined quantity to the shopping cart.
+	 * Shows a snack bar notification on successful addition.
+	 * Resets the quantity back to one after adding to cart.
+	 *
+	 * @param {IProduct} product - The product to be added to the cart
+	 * @returns {void}
+	 */
 	addToCart(product: IProduct): void {
 		this.value = parseInt(this.numberInput.nativeElement.value);
 		if (product) {
