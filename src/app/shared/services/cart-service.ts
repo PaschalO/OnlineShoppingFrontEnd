@@ -75,7 +75,6 @@ export class CartService {
 	/**
 	 * Clears the cart by removing all items from the local storage and updating the cart item count.
 	 *
-	 * @memberof ClassName
 	 * @function clearCart
 	 * @returns {void}
 	 *

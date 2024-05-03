@@ -167,7 +167,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 	 * @returns {string | null} - The error status of the card number field. Possible values are "required", "invalid", or null.
 	 */
 	get cardNumberError(): "required" | "invalid" | null {
-		const requiredField = this.required(this.secondFormGroup, "card");
 		const cardNumberField = this.secondFormGroup.get("card");
 
 		if (cardNumberField?.hasError("required")) return "required";
@@ -239,11 +238,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 	 * If the current form is invalid, marks all form controls as touched.
 	 *
 	 * @param {MatStepper} stepper - The mat stepper component.
-	 * @param {FormGroup} formGroup - The form group to be validated.
 	 *
 	 * @return {void} - This method does not return a value.
 	 */
-	nextButton(stepper: MatStepper, formGroup: FormGroup): void {
+	nextButton(stepper: MatStepper): void {
 		const currentForm =
 			stepper.selectedIndex === 0
 				? this.firstFormGroup

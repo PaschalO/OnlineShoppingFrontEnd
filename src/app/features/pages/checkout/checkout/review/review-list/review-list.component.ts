@@ -9,8 +9,7 @@ import {
 	Observable,
 	Subject,
 	switchMap,
-	takeUntil,
-	tap
+	takeUntil
 } from "rxjs";
 
 // services modules
