@@ -1,27 +1,34 @@
 # StoreFrontEnd
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.6.
+This project was generated with Angular CLI version 16.1.6.
 
-## Development server
+### Getting Started
+This is an API for an online shopping application. It enables consumers to interact with the application programmatically.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Required Technologies
+The project utilizes the following technologies:
+- Prettier: Formatting tool for ensuring code consistency. 
+- TypeScript: Language for application-scale JavaScript development. 
+- Auth0: Solution for authentication and authorization processes. 
+- UploadCare: Service for smoothly uploading images to the cloud. 
+- Angular Material: Material design for Angular applications.
 
-## Code scaffolding
+### Development Setup
+To set up the project locally, follow these steps:
+- Clone the project to your machine. 
+- Run npm install to install the required dependencies for the product.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Running a Development server
+To run a development server, follow these steps:
+- Execute ng serve. This will spin up a dev server.
+- Navigate to http://localhost:4200/. Any changes made to the source files will automatically reload the application.
 
-## Build
+In order to fully run the application, you'll also need to clone the backend, install its dependencies (npm install), and run it in another terminal session while the frontend server is running.
+Environment Setup
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Environment Setup
+To set up the environment variables, create an auth_config.json file in the root directory. Copy the following prototype and fill in the details
+  - "domain": "dev-bgg57gfmuzsxtfzv.us.auth0.com"
+  - "clientId": "yGWRMFzb1urZSYiGUjhZNXDO2OHoz7L0"
+  - "redirect_uri": "http://localhost:4200/products"
+  - "audience": "https://nodestorebackend.sample"

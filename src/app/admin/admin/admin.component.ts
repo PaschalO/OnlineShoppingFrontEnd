@@ -49,7 +49,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	verifySubscription!: Subscription;
 	isAdmin$: Observable<boolean> | undefined;
 
-  // Variable for controlling the table display
+	// Variable for controlling the table display
 	displayedColumns: string[] = [
 		"created_at",
 		"name",
@@ -86,13 +86,23 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}
 	}
 
-  // Method to check if the logged-in user has a role of Admin
+	/**
+	 * Fetches the user role.
+	 *
+	 * @returns {Observable<boolean>} An observable that emits a boolean value indicating if the user role is "Admin".
+	 */
 	fetchUserRole = () => {
 		return this.userService
 			.fetchUserRole$()
 			.pipe(map((role) => role === "Admin"));
 	};
 
+	/**
+	 * Handles the upload event.
+	 *
+	 * @param {Event} e - The event object.
+	 * @returns {void}
+	 */
 	handleUploadEvent = (e: Event): void => {
 		if (!(e instanceof CustomEvent)) {
 			return;
@@ -104,6 +114,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}
 	};
 
+	/**
+	 * Updates the image property of products that match the uploaded file names
+	 * and adds them to the payload array.
+	 *
+	 * @function handleDoneFlow
+	 * @memberof [yourClass]
+	 * @returns {void}
+	 */
 	handleDoneFlow = () => {
 		this.uploadedFiles.forEach((imageName) => {
 			const fileName = imageName.name.split(".jpg")[0];
@@ -119,6 +137,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 		});
 	};
 
+	/**
+	 * Creates a product by making a POST request to the API.
+	 *
+	 * @return {Observable<Object>} An observable that emits the response from the API.
+	 */
 	createProduct() {
 		if (this.payload.length > 0) {
 			return this.http
@@ -141,6 +164,13 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Fetches the access token from the authentication service.
+	 * Verifies the user's authentication status, and if the user is logged in,
+	 * fetches the access token and sets it on the local variable 'token'.
+	 *
+	 * @return {void}
+	 */
 	fetchAccessToken() {
 		this.verifySubscription = this.authenticationService
 			.verifyIfUserIsAuthenticated()
@@ -155,6 +185,11 @@ export class AdminComponent implements OnInit, OnDestroy {
 			});
 	}
 
+	/**
+	 * Fetches all products and updates the data source.
+	 *
+	 * @return {void}
+	 */
 	fetchAllProducts() {
 		this.productService.getProducts().subscribe((products) => {
 			this.allProducts = products;
@@ -165,6 +200,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 		});
 	}
 
+	/**
+	 * Update a product in the system.
+	 *
+	 * @param {IProduct} product - The product to be updated.
+	 * @return {void}
+	 */
 	editProduct() {
 		const product: IProduct = {
 			id: 85,
@@ -182,6 +223,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 			.subscribe((data) => console.log(data));
 	}
 
+	/**
+	 * Applies a filter to the data source based on the provided event.
+	 *
+	 * @param {Event} event - The event object that triggered the filter.
+	 * @return {void}
+	 */
 	applyFilter(event: Event) {
 		const filterValue = (event.target as HTMLInputElement).value;
 		this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -191,6 +238,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	/**
+	 * Retrieves the error handler function.
+	 *
+	 * @private
+	 * @return {function} The error handler function.
+	 */
 	private handleError() {
 		return this.handleErrorService.handleError;
 	}
