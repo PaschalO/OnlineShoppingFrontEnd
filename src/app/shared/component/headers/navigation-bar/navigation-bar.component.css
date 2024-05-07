@@ -10,10 +10,8 @@
     gap: 1rem
 }
 
+.profile_image, img {
+  width: 30px;
+  border-radius: 50%;
 
-/* below code does not do anything */
-
-.navbar-right-links .mat-badge-accent .mat-badge-content {
-    background: green;
 }
-

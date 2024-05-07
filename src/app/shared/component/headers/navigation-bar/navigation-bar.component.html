@@ -2,11 +2,31 @@
     <a mat-button routerLink="/products" routerLinkActive="active">MyStore</a>
     <app-search-form></app-search-form>
     <div *ngIf="cartService.cartCount$ | async as cartV" class="navbar-right-links">
-        <ng-container *ngIf="userRole$ | async">
+        <ng-container *ngIf="isAdmin$ | async; else user">
           <button mat-button (click)="navigateToAdmin()">Admin</button>
-          <span *ngIf="users$ | async as user"> {{user.nickname}}</span>
+          <ng-container *ngIf="users$ | async as user">
+            <ng-container *ngIf="user.given_name else userLoggedInWithSocialMedia">
+              <span>{{user.given_name}}</span>
+            </ng-container>
+            <ng-template #userLoggedInWithSocialMedia>
+              <div class="profile_image">
+                <img [src]="user.picture"  alt=""/>
+              </div>
+            </ng-template>
+          </ng-container>
         </ng-container>
-        <span *ngIf="users$ | async as user"> {{user.given_name}}</span>
+        <ng-template #user>
+          <ng-container *ngIf="users$ | async as user">
+            <ng-container *ngIf="user.given_name else userNotLoggedInWithSocialMedia">
+              <span>{{user.given_name}}</span>
+            </ng-container>
+            <ng-template #userNotLoggedInWithSocialMedia>
+              <div class="profile_image">
+                <img [src]="user.picture"  alt=""/>
+              </div>
+            </ng-template>
+          </ng-container>
+        </ng-template>
         <ng-container
                 *ngIf="isAuthenticated$ | async; then loggedIn; else loggedOut">
         </ng-container>
@@ -26,6 +46,5 @@
         </button>
     </div>
 </mat-toolbar>
-
 
 

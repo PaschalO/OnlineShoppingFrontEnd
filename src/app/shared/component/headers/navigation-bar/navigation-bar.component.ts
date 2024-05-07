@@ -21,7 +21,7 @@ export class NavigationBarComponent implements OnInit {
 	isButtonEnabled$: Observable<boolean> | undefined;
 	users$: Observable<User | null | undefined> | undefined;
 	isAuthenticated$: Observable<Boolean> | undefined;
-	userRole$: Observable<boolean> | undefined;
+	isAdmin$: Observable<boolean> | undefined;
 
 	/**
 	 * Creates an instance of the class.
@@ -42,7 +42,7 @@ export class NavigationBarComponent implements OnInit {
 	ngOnInit(): void {
 		this.isButtonEnabled$ = this.cartService.disableCartIcon();
 		this.users$ = this.userService.userInfo;
-		this.userRole$ = this.fetchUserRoles();
+		this.isAdmin$ = this.fetchUserRoles();
 	}
 
 	/**
