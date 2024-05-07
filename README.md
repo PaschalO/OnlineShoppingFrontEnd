@@ -23,7 +23,7 @@ For first time usage, you should log in as an admin, which grants you access to 
 
 - Log in with the admin credentials provided below.
 - Click on the Admin button to navigate to the admin page.
-- Click Upload File and upload all product images to the UploadCloud server.
+- Click Upload File and upload all product images under the `src -> assets folder -> product-images` to the UploadCloud server.
 - Once upload is complete, click Send to Database to populate the PostgreSQL database with the product details.
 
 When you're done setting up products, click on the logo to navigate back to the home page where you can explore the products to purchase.
