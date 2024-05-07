@@ -211,28 +211,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 		return null;
 	}
 
-	// shippingNextButton(stepper: MatStepper): void {
-	// 	const currentForm = this.firstFormGroup;
-	// 	if (currentForm.valid) {
-	// 		stepper.next();
-	// 	} else {
-	// 		for (const key in currentForm.controls) {
-	// 			currentForm.controls[key].markAsTouched();
-	// 		}
-	// 	}
-	// }
-
-	// billingNextButton(stepper: MatStepper): void {
-	// 	const currentForm = this.secondFormGroup;
-	// 	if (currentForm.valid) {
-	// 		stepper.next();
-	// 	} else {
-	// 		for (const key in currentForm.controls) {
-	// 			currentForm.controls[key].markAsTouched();
-	// 		}
-	// 	}
-	// }
-
 	/**
 	 * Advances to the next step in the mat stepper if the current form is valid.
 	 * If the current form is invalid, marks all form controls as touched.

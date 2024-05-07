@@ -25,12 +25,12 @@
                 <app-checkout-form [parent]="firstFormGroup"></app-checkout-form>
               </div>
               <div class="checkout-form-button">
-                <button mat-stroked-button matStepperNext (click)="nextButton(stepper, firstFormGroup)">Continue to payment</button>
+                <button mat-stroked-button (click)="nextButton(stepper)">Continue to payment</button>
               </div>
             </form>
           </mat-step>
           <!-- stepper 2 -->
-          <mat-step [stepControl]="secondFormGroup"  label="Payment" errorMessage="Error in the shipping form">
+          <mat-step [stepControl]="secondFormGroup"  label="Payment" errorMessage="Error in the payment form">
             <div class="payment">
               <span>All transactions are secure and encrypted</span>
               <form [formGroup]="secondFormGroup" class="checkout-form">
@@ -118,7 +118,7 @@
                     <div class="checkout-form-button">
                       <div class="row">
                         <button mat-stroked-button matStepperPrevious>Back to shipping</button>
-                        <button mat-stroked-button matStepperNext (click)="nextButton(stepper, secondFormGroup)">Continue to review</button>
+                        <button mat-stroked-button matStepperNext (click)="nextButton(stepper)">Continue to review</button>
                       </div>
                     </div>
                   </mat-card-content>
@@ -165,5 +165,3 @@
     <!-- End of order summary/cart subtotal component -->
   </div>
 </div>
-
-<pre>{{cardNumberError | json}}</pre>

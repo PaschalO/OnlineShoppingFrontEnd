@@ -3,7 +3,8 @@ import {
 	ElementRef,
 	OnDestroy,
 	OnInit,
-	ViewChild
+	ViewChild,
+	AfterViewInit
 } from "@angular/core";
 import * as LR from "@uploadcare/blocks";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -31,9 +32,9 @@ const httpOptions = {
 	templateUrl: "./admin.component.html",
 	styleUrls: ["./admin.component.css"]
 })
-export class AdminComponent implements OnInit, OnDestroy {
-	@ViewChild("ctxProvider", { static: false }) ctxProvider!: ElementRef<
-		typeof LR.UploadCtxProvider.prototype
+export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
+	@ViewChild("ctxProvider", { static: false }) ctxProviderRef!: ElementRef<
+		InstanceType<LR.UploadCtxProvider>
 	>;
 	@ViewChild(MatPaginator) paginator!: MatPaginator;
 	@ViewChild(MatSort) sort!: MatSort;
@@ -48,6 +49,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	accessTokenSubscription!: Subscription;
 	verifySubscription!: Subscription;
 	isAdmin$: Observable<boolean> | undefined;
+	error: string = "";
 
 	// Variable for controlling the table display
 	displayedColumns: string[] = [
@@ -74,16 +76,17 @@ export class AdminComponent implements OnInit, OnDestroy {
 	}
 
 	ngAfterViewInit() {
-		if (this.ctxProvider) {
-			this.ctxProvider.nativeElement.addEventListener(
+		// access the dom element after it has been fully initialized
+		setTimeout(() => {
+			this.ctxProviderRef.nativeElement.addEventListener(
 				"change",
 				this.handleUploadEvent
 			);
-			this.ctxProvider.nativeElement.addEventListener(
+			this.ctxProviderRef.nativeElement.addEventListener(
 				"modal-close",
 				this.handleDoneFlow
 			);
-		}
+		}, 5000);
 	}
 
 	/**
@@ -103,14 +106,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 	 * @param {Event} e - The event object.
 	 * @returns {void}
 	 */
-	handleUploadEvent = (e: Event): void => {
+	handleUploadEvent = (e: LR.EventMap["change"]): void => {
 		if (!(e instanceof CustomEvent)) {
 			return;
 		}
 
 		if (e.detail) {
 			this.uploadedFiles =
-				this.ctxProvider.nativeElement.getOutputCollectionState().allEntries;
+				this.ctxProviderRef.nativeElement.getOutputCollectionState().allEntries;
 		}
 	};
 
@@ -143,6 +146,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 	 * @return {Observable<Object>} An observable that emits the response from the API.
 	 */
 	createProduct() {
+		console.log(this.payload, "line 147");
 		if (this.payload.length > 0) {
 			return this.http
 				.post(`${this.api}`, this.payload, httpOptions)
@@ -157,7 +161,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 				)
 				.subscribe({
 					next: (data) => console.log(data, "line 106"),
-					error: (err) => console.log(err, "line 117")
+					error: (err) => (this.error = err)
 				});
 		} else {
 			return null;
@@ -251,5 +255,14 @@ export class AdminComponent implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		this.verifySubscription.unsubscribe();
 		this.accessTokenSubscription.unsubscribe();
+
+		this.ctxProviderRef.nativeElement.removeEventListener(
+			"change",
+			this.handleUploadEvent
+		);
+		this.ctxProviderRef.nativeElement.removeEventListener(
+			"modal-close",
+			this.handleDoneFlow
+		);
 	}
 }

@@ -62,7 +62,8 @@
                    multiple="true"
                    pubkey="7d8390c34a96969780d3"
                    remove-copyright="true"
-                   source-list="local, url, camera">
+                   source-list="local, url, camera"
+        >
         </lr-config>
 
         <lr-file-uploader-regular
@@ -75,6 +76,7 @@
         <button mat-stroked-button (click)="createProduct()">Send to Database</button>
         <button mat-stroked-button (click)="fetchAllProducts()">Get products</button>
         <button mat-stroked-button (click)="editProduct()">Edit a product</button>
+        <ng-container *ngIf="error">{{this.error}}</ng-container>
       </div>
     </div>
   </ng-container>
@@ -85,7 +87,4 @@
   </div>
 </ng-template>
 
-<!--  <pre>{{token}}</pre>-->
-
-<!--</ng-container>-->
 
