@@ -37,14 +37,6 @@ Follow these steps to run the development server:
 
 To fully run the application, you also need to set up the backend. Clone the backend code from this URL: https://github.com/PaschalO/OnlineShoppingBackend, install its dependencies by running npm install in the terminal, follow the instructions for setup your postgresql and run the backend server `npm run serve` in a separate terminal session alongside the frontend server.
 
-
-### Environment Setup
-To set up the environment variables, create an auth_config.json file in the root directory. Copy the following prototype and fill in the details
-  - "domain": "dev-bgg57gfmuzsxtfzv.us.auth0.com"
-  - "clientId": "yGWRMFzb1urZSYiGUjhZNXDO2OHoz7L0"
-  - "redirect_uri": "http://localhost:4200/products"
-  - "audience": "https://nodestorebackend.sample"
-
 ### ADMIN CREDENTIALS
 To access admin features, use the following credentials to log in:
 - email: admin@shoppingfrontend.com
