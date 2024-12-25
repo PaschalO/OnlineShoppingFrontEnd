@@ -52,7 +52,7 @@ jobs:
           name: Deploy to s3
           command: |
             cd ~/workspace/store-front-end
-            aws s3 sync ./ s3://angular-shopping-v1/ --exclude "assets/*"
+            aws s3 sync / s3://angular-shopping-v1/ --exclude "assets/*"
 
 workflows:
   build-and-test:
