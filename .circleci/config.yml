@@ -37,7 +37,8 @@ jobs:
             - .  # Persist the entire project directory or specific folders/files
 
   deploy:
-    executor: angular-executor
+    executor:
+      name: node/default
     steps:
       - attach_workspace:
           at: ~/workspace  # Attach the workspace at a specific directory
