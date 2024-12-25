@@ -18,6 +18,7 @@ import { MatSort } from "@angular/material/sort";
 import { ErrorService } from "../../shared/services/error.service";
 import { ProductService } from "../../shared/services/product.service";
 import { UserService } from "../../shared/services/user.service";
+import environment from "../../environments/environment";
 
 LR.registerBlocks(LR);
 
@@ -41,7 +42,7 @@ export class AdminComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	/* variables for uploading images and making http requests */
 	uploadedFiles: LR.OutputFileEntry[] = [];
-	private api = "http://localhost:3000/products";
+	private api = environment.auth.redirect_uri;
 	products: IProduct[] = [];
 	payload: IProduct[] = [];
 	allProducts: IProduct[] | undefined;

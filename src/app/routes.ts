@@ -1,18 +1,20 @@
 import { Routes } from "@angular/router";
+import { AuthGuard } from "@auth0/auth0-angular";
 
 const routeConfig: Routes = [
 	{ path: "", pathMatch: "full", redirectTo: "/products" },
 	{
-		path: "admin",
-		loadChildren: () =>
-			import("./admin/admin.module").then((a) => a.AdminModule)
-	},
-	{
 		path: "products",
 		loadChildren: () =>
 			import("./features/pages/products/products.module").then(
-				(p) => p.ProductsModule
+				(c) => c.ProductsModule
 			)
+	},
+	{
+		path: "admin",
+		loadChildren: () =>
+			import("./admin/admin.module").then((a) => a.AdminModule),
+		canActivate: [AuthGuard]
 	},
 	{
 		path: "cart",
@@ -26,7 +28,8 @@ const routeConfig: Routes = [
 		loadChildren: () =>
 			import("./features/pages/checkout/checkout.module").then(
 				(x) => x.CheckoutModule
-			)
+			),
+		canActivate: [AuthGuard]
 	},
 	{
 		path: "confirmation-page",
@@ -35,10 +38,9 @@ const routeConfig: Routes = [
 				"./features/pages/confirmation-page/confirmation-page.module"
 			).then((y) => y.ConfirmationPageModule)
 	},
-
 	{
 		path: "**",
-		redirectTo: "products"
+		redirectTo: "/products"
 	}
 ];
 

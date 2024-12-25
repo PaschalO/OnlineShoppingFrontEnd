@@ -5,9 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { AngularMaterialModule } from "../angularMaterial/angularMaterial.module";
 import { AuthGuard } from "@auth0/auth0-angular";
 
-export const routes: Routes = [
-	{ path: "", component: AdminComponent, canActivate: [AuthGuard] }
-];
+export const routes: Routes = [{ path: "", component: AdminComponent }];
 
 @NgModule({
 	declarations: [AdminComponent],

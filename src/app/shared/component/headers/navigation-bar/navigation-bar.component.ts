@@ -43,6 +43,7 @@ export class NavigationBarComponent implements OnInit {
 		this.isButtonEnabled$ = this.cartService.disableCartIcon();
 		this.users$ = this.userService.userInfo;
 		this.isAdmin$ = this.fetchUserRoles();
+		console.log("this navigation bar component is loaded");
 	}
 
 	/**

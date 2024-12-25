@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@angular/core";
 import { AuthService } from "@auth0/auth0-angular";
 import { DOCUMENT } from "@angular/common";
 import { CartService } from "./cart-service";
+import environment from "../../environments/environment";
 
 @Injectable({
 	providedIn: "root"
@@ -32,10 +33,9 @@ export class AuthenticationService {
 	logout() {
 		this.auth.logout({
 			logoutParams: {
-				returnTo: "http://localhost:4200/products"
+				returnTo: environment.auth.redirect_uri
 			}
 		});
-
 		this.cartService.clearCart();
 	}
 

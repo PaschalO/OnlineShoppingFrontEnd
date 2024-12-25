@@ -18,6 +18,7 @@ import {
 } from "rxjs";
 import { FormControl } from "@angular/forms";
 import { ErrorService } from "./error.service";
+import environment from "../../environments/environment";
 
 /**
  * Service that provides methods for retrieving and manipulating products.
@@ -27,7 +28,7 @@ import { ErrorService } from "./error.service";
 })
 export class ProductService {
 	private products: IProduct[] = [];
-	private readonly productUrl: string = "http://localhost:3000/products";
+	private readonly productUrl: string = environment.auth.apiKey;
 	private searchText: FormControl = new FormControl();
 	private token: string = "";
 	private httpOptions = {

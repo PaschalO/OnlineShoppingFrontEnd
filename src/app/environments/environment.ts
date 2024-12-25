@@ -1,5 +1,5 @@
 /*
- * Holds all the environmental variables
+ * Holds all the environmental variables for development
  * */
 
 import authConfig from "../../../auth_config.json";
@@ -9,8 +9,9 @@ const environment = {
 	auth: {
 		domain: authConfig.domain,
 		clientId: authConfig.clientId,
-		redirect_uri: authConfig.redirect_uri,
-		audience: authConfig.audience
+		redirect_uri: window.location.origin,
+		audience: authConfig.audience,
+		apiKey: "http://localhost:3000/products"
 	}
 };
 

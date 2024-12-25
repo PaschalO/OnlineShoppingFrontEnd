@@ -8,11 +8,10 @@ import { ReviewListComponent } from "./checkout/review/review-list/review-list.c
 import { CheckoutFormComponent } from "./checkout/checkout-form/checkout-form.component";
 import { ReviewItemComponent } from "./checkout/review/review-item/review-item.component";
 import { RouterModule, Routes } from "@angular/router";
-import { AuthGuard } from "@auth0/auth0-angular";
 import { ConfirmationPageModule } from "../confirmation-page/confirmation-page.module";
 
 export const routes: Routes = [
-	{ path: "checkout", component: CheckoutComponent, canActivate: [AuthGuard] }
+	{ path: "checkout", component: CheckoutComponent }
 ];
 
 @NgModule({
