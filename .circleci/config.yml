@@ -37,7 +37,7 @@ jobs:
             - .  # Persist the entire project directory or specific folders/files
 
   deploy:
-    executor: python-executor
+    executor: angular-executor
     steps:
       - attach_workspace:
           at: ~/workspace  # Attach the workspace at a specific directory
