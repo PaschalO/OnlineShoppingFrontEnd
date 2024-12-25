@@ -1,0 +1,62 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@7.0.0
+  aws-cli: circleci/aws-cli@5.1.1
+  aws-s3: circleci/aws-s3@4.1.0
+
+executors:
+  angular-executor:
+    docker:
+      - image: cimg/node:18.6.1
+jobs:
+  build:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-modules-{{ checksum "package-lock.json" }}
+            - node-modules-
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Run Prettier
+          command: npm run prettier
+      - save_cache:
+          paths:
+            - ~/.npm
+          key: node-modules-{{ checksum "package-lock.json" }}
+      - run:
+          name: Frontend Build
+          command: npm run build
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .  # Persist the entire project directory or specific folders/files
+
+  deploy:
+    executor: python-executor
+    steps:
+      - attach_workspace:
+          at: ~/workspace  # Attach the workspace at a specific directory
+      - run:
+          name: Debug Workspace
+          command: |
+            echo "Workspace Contents:"
+            ls -la ~/workspace  # List all files to confirm they are accessible
+      - aws-cli/setup
+      - run:
+          name: Deploy to s3
+          command: |
+            cd ~/workspace/store-front-end
+            aws s3 sync ./ s3://angular-shopping-v1/ --exclude "assets/*"
+
+workflows:
+  build-and-test:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build

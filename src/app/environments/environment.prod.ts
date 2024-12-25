@@ -15,4 +15,5 @@ const environment = {
 	}
 };
 
+console.log(environment);
 export default environment;

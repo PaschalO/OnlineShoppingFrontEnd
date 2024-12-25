@@ -9,10 +9,12 @@ const environment = {
 	auth: {
 		domain: authConfig.domain,
 		clientId: authConfig.clientId,
-		redirect_uri: authConfig.redirectUriDev,
+		redirect_uri: window.location.origin,
 		audience: authConfig.audience,
 		apiKey: authConfig.apiKeydev
 	}
 };
+
+console.log(environment);
 
 export default environment;
