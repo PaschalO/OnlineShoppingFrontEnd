@@ -1,1 +1,9 @@
-
+{
+  "domain": "dev-bgg57gfmuzsxtfzv.us.auth0.com",
+  "clientId": "yGWRMFzb1urZSYiGUjhZNXDO2OHoz7L0",
+  "audience": "https://nodestorebackend.sample",
+  "apiKeydev": "http://localhost:3000/products",
+  "redirectUriDev": window.location.origin,
+  "apiKeyProd": "https://onlineshopping-dev.eba-ky2j4zcc.ca-central-1.elasticbeanstalk.com/products",
+  "redirectUriProd": "https://angular-shopping-v1.s3.ca-central-1.amazonaws.com/index.html"
+}

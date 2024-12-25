@@ -9,10 +9,9 @@ const environment = {
 	auth: {
 		domain: authConfig.domain,
 		clientId: authConfig.clientId,
-		redirect_uri:
-			"https://angular-shopping-v1.s3.ca-central-1.amazonaws.com/index.html",
+		redirect_uri: authConfig.redirectUriProd,
 		audience: authConfig.audience,
-		apiKey: "https://onlineshopping-dev.eba-ky2j4zcc.ca-central-1.elasticbeanstalk.com/products"
+		apiKey: authConfig.apiKeyProd
 	}
 };
 

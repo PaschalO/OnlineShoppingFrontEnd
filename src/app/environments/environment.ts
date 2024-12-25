@@ -9,9 +9,9 @@ const environment = {
 	auth: {
 		domain: authConfig.domain,
 		clientId: authConfig.clientId,
-		redirect_uri: window.location.origin,
+		redirect_uri: authConfig.redirectUriDev,
 		audience: authConfig.audience,
-		apiKey: "http://localhost:3000/products"
+		apiKey: authConfig.apiKeydev
 	}
 };
 
