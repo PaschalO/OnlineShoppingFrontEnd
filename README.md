@@ -41,3 +41,7 @@ To fully run the application, you also need to set up the backend. Clone the bac
 To access admin features, use the following credentials to log in:
 - email: admin@shoppingfrontend.com
 - password: Windows78@
+
+### WEBSITE
+
+See link to view the final product - https://angular-shopping-v1.s3.ca-central-1.amazonaws.com/index.html
