@@ -50,11 +50,14 @@ The pipeline automates the process of building, testing, and deploying the appli
     - aws s3 sync dist/ s3://angular-shopping-v1/index.html --exclude "assets/*"
 
 #### **Backend (Nodejs)**
-- **Target: AWS Elastic Beanstalk**
+- **Target: AWS Elastic Beanstalk(Node.js files)**
 - Process:
+  - The backend is decoupled from the frontend. Here is the link https://github.com/PaschalO/OnlineShoppingBackend
+  - It has its own `config.yml` file
   - The `.ebignore` has list of files to ignore making it easy to deploy the application on `eb cli`
+  - the below packages/zips the `build/` folder to elastic beanstalk
   - Command:
-    - `eb deploy`
+    - `eb deploy` 
 
 ### **Diagram**
 See the pipeline folder under the `document folder` for the high-level architecture diagram of this pipeline
